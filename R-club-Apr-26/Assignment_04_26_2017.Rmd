@@ -1,0 +1,160 @@
+---
+title: "Assignment_04_26_2017"
+author: "Ruijuan Li"
+date: "4/26/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+# 3.2.4 Exercises
+1)  
+```{r}
+library(ggplot2)
+ggplot(data = mpg)
+```
+
+2) 
+```{r}
+nrow(mtcars)
+```
+
+3) 
+```{r}
+?mpg
+# drv: f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+```
+
+4) 
+```{r}
+ggplot(data = mpg) + geom_point(mapping = aes(x=cyl, y = hwy))
+```
+
+5) 
+```{r}
+ggplot(data = mpg) + geom_point(mapping = aes(x=class, y = drv))
+```
+
+# 3.3.1 Exercieses
+1) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue")) 
+# because color is inside aes()
+```
+
+2) 
+```{r}
+summary(mpg)
+?mpg
+# characters are categorical? numeric values are continuous? 
+```
+
+3) 
+```{r}
+# ggplot(data = mpg) + 
+# #  geom_point(mapping = aes(x = displ, y = hwy, color = year)) 
+# 
+# ggplot(data = mpg) + 
+#   geom_point(mapping = aes(x = displ, y = hwy, size = year))
+# 
+# ggplot(data = mpg) + 
+#   geom_point(mapping = aes(x = displ, y = hwy, shape = year))
+# 
+# ggplot(data = mpg) + 
+#   geom_point(mapping = aes(x = displ, y = hwy, color = class)) 
+# 
+# ggplot(data = mpg) + 
+#   geom_point(mapping = aes(x = displ, y = hwy, size = class))
+# 
+# ggplot(data = mpg) + 
+#   geom_point(mapping = aes(x = displ, y = hwy, shape = class)) 
+```
+
+4) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = year, size = year)) 
+```
+
+5)  
+```{r}
+?geom_point
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), stroke = 1)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), stroke = 4)
+```
+
+6) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = displ < 5))
+```
+
+# 3.5.1 Exercises 
+1) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap( ~ cty) 
+```
+
+2) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl) 
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = drv, y = cyl)) 
+```
+
+3) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+
+# . means ignore that dimention 
+```
+
+4) 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+# clearly show the pattern for each group as an advantage, cannot see the whole picture as an disadvantage  
+```
+
+5) 
+```{r}
+?facet_wrap
+# facet_grid takes the number of groups in each dimention as the number of colomn and rows 
+```
+
+6) 
+```{r}
+# When using facet_grid() you should usually put the variable with more unique levels in the columns. Why? 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ cty)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(cty ~ drv)
+
+length(unique(mpg$drv))
+length(unique(mpg$cty)) 
+```
+
+
+
+
+
+
