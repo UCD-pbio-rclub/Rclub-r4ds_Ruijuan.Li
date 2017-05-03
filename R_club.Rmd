@@ -100,5 +100,131 @@ ggplot(data = mpg) +
 
 ```
 
+# 05-02-2017
+```{r}
+library(ggplot2)
+# left
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+# right
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv))
+
+mpg$drv
+
+# compared to linetype, better to use group because it doens't add extra legend 
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+              
+ggplot(data = mpg) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv))
+    
+ggplot(data = mpg) +
+  geom_smooth(
+    mapping = aes(x = displ, y = hwy, group = drv)
+  )
+
+# multiple geom 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+# global mapping 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+# overlay with color 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth()
+
+# the use of filter 
+library(dplyr)
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) +  
+  geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
+
+# statistical transformation
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut))
+
+# stat_count & geom_bar are the same thing 
+ggplot(data = diamonds) + 
+  stat_count(mapping = aes(x = cut))
+
+# use identity as stats 
+library(tibble)
+demo <- tribble(
+  ~a,      ~b,
+  "bar_1", 20,
+  "bar_2", 30,
+  "bar_3", 40
+)
+ggplot(data = demo) +
+  geom_bar(mapping = aes(x = a, y = b), stat = "identity")
+
+# use proportion as stats
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1)) 
+
+# stat_summary 
+ggplot(data = diamonds) + 
+  stat_summary(
+    mapping = aes(x = cut, y = depth),
+    fun.ymin = min,
+    fun.ymax = max,
+    fun.y = median
+  )
+
+# color vs fill 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, colour = cut))
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = cut))
+
+# Each colored rectangle represents a combination of cut and clarity
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+
+# position: identity OR dodge OR fill OR jitter OR stack 
+# position = "identity" will place each object exactly where it falls in the context of the graph. This is not very useful for bars, because it overlaps them.
+
+ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) + 
+  geom_bar(alpha = 1/5, position = "identity")
+ggplot(data = diamonds, mapping = aes(x = cut, colour = clarity)) + 
+  geom_bar(fill = NA, position = "identity")
+
+# position = "fill" works like stacking, but makes each set of stacked bars the same height. This makes it easier to compare proportions across groups.
+
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
+
+# position = "dodge" places overlapping objects directly beside one another. This makes it easier to compare individual values 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
+
+# overplotting problem for scatterplot 
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
+
+#### coordinate system 
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
+  geom_boxplot()
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) + 
+  geom_boxplot() +
+  coord_flip()
+
+
+
+
+```
+
+
+
 
 
