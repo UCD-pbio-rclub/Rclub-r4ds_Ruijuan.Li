@@ -144,6 +144,10 @@ What variables does stat_smooth() compute? What parameters control its behaviour
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
   geom_point() + 
   stat_smooth(se = FALSE) # no confidence interval  
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  stat_smooth(se = FALSE, method = lm) # no confidence interval  
 ```
 
 # 5) 
