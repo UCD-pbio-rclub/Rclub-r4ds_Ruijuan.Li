@@ -147,7 +147,9 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
 
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
   geom_point() + 
-  stat_smooth(se = FALSE, method = lm) # no confidence interval  
+  stat_smooth(se = FALSE, method = lm) # no confidence interval 
+
+?stat_smooth 
 ```
 
 # 5) 
@@ -291,7 +293,7 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 
 # almost linear relationship. 
 ?geom_abline
-?coord_fixed 
+?coord_fixed  
 ```
 
 

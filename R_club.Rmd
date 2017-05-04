@@ -241,8 +241,27 @@ bar <- ggplot(data = diamonds) +
 
 bar
 bar + coord_flip()
-bar + coord_polar()
+bar + coord_polar() 
 
+# calculate proportion within each group 
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity, y = ..prop..)) 
+
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1))
+
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
+
+p <- ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = ..prop.., fill = color))  
+
+grid_arrange
+install.packages("gridExtra")
+library("gridExtra")   
 ```
 
 
