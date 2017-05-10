@@ -12,9 +12,6 @@ output:
 library(nycflights13)
 library(tidyverse)
 colnames(flights)
-flights$arr_delay
-flights$month
-?flights
 ```
 
 # 5.2.4 Exercises
@@ -66,7 +63,7 @@ arrange(flights, desc(is.na(dep_time)), dep_time) # don't understand...
 
 2) Sort flights to find the most delayed flights. Find the flights that left earliest.
 ```{r}
-head(arrange(flights, desc(dep_delay)), 1)
+head(arrange(flights, desc(dep_delay)), 1) 
 head(arrange(flights, dep_time), 1)
 ```
 
@@ -80,5 +77,108 @@ head(arrange(flights, air_time), 1)
 head(arrange(flights, distance), 1)
 tail(arrange(flights, distance), 1)
 ```
+
+# 5.4.1 Exercises
+1) Brainstorm as many ways as possible to select dep_time, dep_delay, arr_time, and arr_delay from flights.
+```{r}
+colnames(flights)
+tmp <- select(flights, dep_time, dep_delay, arr_time, arr_delay)
+```
+
+2) What happens if you include the name of a variable multiple times in a select() call?
+```{r}
+dim(select(flights, dep_time, dep_time)) # only take once 
+```
+
+3) What does the one_of() function do? Why might it be helpful in conjunction with this vector?
+```{r}
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+?one_of # variables in charactor vector 
+tmp2 <- select(flights, one_of(vars)) # this way we take 
+colnames(tmp2) # we can predefine the specific column that we want to select 
+```
+
+4) Does the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?
+```{r}
+tmp3 <- select(flights, contains("TIME")) 
+colnames(tmp3) 
+tmp4 <- select(flights, contains("time"))
+identical(tmp3, tmp4) # case insensitive 
+# make it case sensitive 
+select(flights, contains("TIME", ignore.case = F)) 
+```
+
+#5.5.2 Exercises
+
+1) Currently dep_time and sched_dep_time are convenient to look at, but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
+```{r}
+colnames(flights)
+head(flights$dep_time)
+tmp5 <- mutate(flights, 
+dep_time_2 = (dep_time %/% 100 * 60) +  (dep_time %% 100),
+sched_dep_time_2 = (sched_dep_time %/% 100 * 60) +  (sched_dep_time %% 100)
+)
+
+head(tmp5[,c("dep_time", "dep_time_2", "sched_dep_time", "sched_dep_time_2")]) 
+```
+
+2) Compare air_time with arr_time - dep_time. What do you expect to see? What do you see? What do you need to do to fix it?
+```{r}
+tmp6<- mutate(flights,
+          new = arr_time - dep_time)
+tmp6[,c("arr_time", "new")] # not the same, they should be the same 
+
+?flights
+tmp7 <- mutate(flights, 
+               arr_time_2 = (arr_time %/% 100 * 60) +  (arr_time %% 100),
+               dep_time_2 = (dep_time %/% 100 * 60) +  (dep_time %% 100),
+               air_time_2 = arr_time_2 - dep_time_2)
+identical(tmp7$air_time_2, tmp7$air_time) 
+colnames(flights) 
+
+###### 
+mutate(flights,
+       air_time2 = arr_time - dep_time,
+       air_time_diff = air_time2 - air_time) %>%
+  filter(air_time_diff != 0) %>%
+  select(air_time, air_time2, dep_time, arr_time, dest)
+
+```
+
+3) Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?
+```{r}
+mutate(flights,
+       dep_delay2 = dep_time - sched_dep_time) %>%
+  filter(dep_delay2 != dep_delay) %>%
+  select(dep_time, sched_dep_time, dep_delay, dep_delay2)
+
+```
+
+4) Find the 10 most delayed flights using a ranking function. How do you want to handle ties? Carefully read the documentation for min_rank().
+```{r}
+mutate(flights,
+       dep_delay_rank = min_rank(-dep_delay)) %>%
+  arrange(dep_delay_rank) %>% 
+  filter(dep_delay_rank <= 10) 
+```
+
+5) What does 1:3 + 1:10 return? Why?
+```{r}
+# 1:3 + 1:10
+1:3
+1:10
+11:20 + 1:10 # because they need to be vectorized 
+```
+
+6) What trigonometric functions does R provide?
+```{r}
+# All the classics: cos, sin, tan, acos, asin, atan, plus a few others that are drive by numerical or computational issues
+```
+
+
+
+
+
+
 
 

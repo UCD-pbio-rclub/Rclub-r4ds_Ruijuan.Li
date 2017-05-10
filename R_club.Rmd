@@ -297,9 +297,90 @@ filter(df, x > 1)
 filter(df, is.na(x) | x > 1)
 
 # Arrange rows with arrange()
+arrange(flights, year, month, day)
+arrange(flights, desc(arr_delay))
 
+### Select columns with select()
+select(flights, year, month, day)
+select(flights, year:day)
+select(flights, -(year:day)) # deselect certain colnames 
+colnames(select(flights, matches("(.)\\1")))  ### repeated character... 
+?select
+rename(flights, tail_num = tailnum)$tail_num # rename certain colnames 
+dim(select(flights, time_hour, air_time, everything())) # move time_hour & air_time to the beginning of the df
+dim(flights)
 
+# 5.5 Add new variables with mutate() # add new columns which are functions of the existing columns 
+flights_sml <- select(flights, 
+  year:day, 
+  ends_with("delay"), 
+  distance, 
+  air_time
+)
 
+dim(flights_sml)
+
+tmp <- mutate(flights_sml,
+  gain = arr_delay - dep_delay,
+  speed = distance / air_time * 60
+)
+
+dim(tmp)
+
+tmp2 <- mutate(flights_sml,
+  gain = arr_delay - dep_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+
+dim(tmp2)
+
+transmute(flights,
+  gain = arr_delay - dep_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+) # only keep the new variables 
+
+colnames(flights)
+
+transmute(flights,
+  dep_time,
+  hour = dep_time %/% 100,
+  minute = dep_time %% 100
+)
+flights$dep_time
+
+?lead
+lead(1:10, 1)
+lead(1:10, 2)
+lag(1:10, 1)
+
+x <- runif(5)
+x
+cbind(ahead = lead(x), x, behind = lag(x))
+
+df <- data.frame(year = 2000:2005, value = (0:5) ^ 2)
+df
+scrambled <- df[sample(nrow(df)), ]
+scrambled
+wrong <- mutate(scrambled, prev = lag(value))
+arrange(wrong, year)
+
+right <- mutate(scrambled, prev = lag(value, order_by = year))
+arrange(right, year)
+
+x <- c(1:10)
+x
+cumsum(x)
+cummean(x)
+
+y <- c(1, 2, 2, NA, 3, 4)
+min_rank(y) 
+min_rank(desc(y))
+row_number(y)
+dense_rank(y)
+percent_rank(y)
+cume_dist(y)
 
 ```
 
