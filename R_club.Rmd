@@ -264,6 +264,44 @@ install.packages("gridExtra")
 library("gridExtra")   
 ```
 
+# 05-09-2017 
+```{r}
+# install.packages("nycflights13")
+library(nycflights13)
+library(tidyverse)
+
+flights # Tibbles are data frames, but slightly tweaked to work better in the tidyverse.  
+
+# Filter rows with filter() 
+filter(flights, month == 1, day == 1)
+jan1 <- filter(flights, month == 1, day == 1)
+(dec25 <- filter(flights, month == 12, day == 25))
+
+sqrt(2) ^ 2 == 2
+1/49 * 49 == 1
+
+near(sqrt(2) ^ 2,  2)
+near(1 / 49 * 49, 1)
+
+tmp <- filter(flights, month == 11 | month == 12)
+nov_dec <- filter(flights, month %in% c(11, 12))
+identical(tmp, nov_dec)
+
+filter(flights, !(arr_delay > 120 | dep_delay > 120))
+filter(flights, arr_delay <= 120, dep_delay <= 120)
+
+# As well as & and |, R also has && and ||. Don’t use them here!  
+df <- tibble(x = c(1, NA, 3))
+df
+filter(df, x > 1)
+filter(df, is.na(x) | x > 1)
+
+# Arrange rows with arrange()
+
+
+
+
+```
 
 
 
