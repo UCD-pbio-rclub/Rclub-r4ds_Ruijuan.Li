@@ -25,6 +25,7 @@ dest_houston <- filter(flights, dest == "IAH" | dest == "HOU")
 carrier_UA_AA_DL <- filter(flights, carrier == "UA" | carrier == "AA" | carrier == "DL")
 # Departed in summer (July, August, and September)
 month_789 <- filter(flights, month == 7 | month == 8 | month == 9)
+filter(flights, month %in% 7:9) 
 # Arrived more than two hours late, but didn’t leave late
 arr_delay_120_dep_delay_0 <- filter(flights, arr_delay > 120 & dep_delay <= 0)
 # Were delayed by at least an hour, but made up over 30 minutes in flight
@@ -53,12 +54,16 @@ NA ^ 0 # square 0 of any number is equal to 1
 NA | TRUE # | stands for OR, at least one TRUE leads to TRUE
 FALSE & NA # & stands for AND, at least one FALSE leads to FALSE 
 # the result of | and & must be "TRUE" or "FALSE"  
+TRUE ^ 0
+class(NA)
+class(TRUE) 
 ```
 
 # 5.3.1 Exercises
 1) How could you use arrange() to sort all missing values to the start? (Hint: use is.na()).
 ```{r}
-arrange(flights, desc(is.na(dep_time)), dep_time) # don't understand... 
+arrange(flights, desc(is.na(dep_time)), dep_time) # don't understand...
+arrange(flights, desc(is.na(dep_time))) 
 ```
 
 2) Sort flights to find the most delayed flights. Find the flights that left earliest.
@@ -128,38 +133,48 @@ tmp6<- mutate(flights,
           new = arr_time - dep_time)
 tmp6[,c("arr_time", "new")] # not the same, they should be the same 
 
-?flights
-tmp7 <- mutate(flights, 
-               arr_time_2 = (arr_time %/% 100 * 60) +  (arr_time %% 100),
-               dep_time_2 = (dep_time %/% 100 * 60) +  (dep_time %% 100),
-               air_time_2 = arr_time_2 - dep_time_2)
-identical(tmp7$air_time_2, tmp7$air_time) 
+max(flights$arr_time, na.rm = T) 
+
+?flights 
 colnames(flights) 
+summary(flights)
+
+tmp7 <- mutate(flights, 
+dep_time_2 = (dep_time %/% 100 * 60) +  (dep_time %% 100),
+arr_time_2 = (arr_time %/% 100 * 60) +  (arr_time %% 100), 
+air_time_2 = arr_time_2 - dep_time_2
+)
+
+select(tmp7, dep_time_2, arr_time_2, air_time_2, air_time)
 
 ###### 
+dim(flights)
 mutate(flights,
        air_time2 = arr_time - dep_time,
        air_time_diff = air_time2 - air_time) %>%
   filter(air_time_diff != 0) %>%
-  select(air_time, air_time2, dep_time, arr_time, dest)
+  select(air_time, air_time2, dep_time, arr_time, dest) 
 
 ```
 
 3) Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?
 ```{r}
+select(flights, dep_time, sched_dep_time, dep_delay)
+flights$dep_delay == flights$sched_dep_time - flights$dep_time 
+
 mutate(flights,
        dep_delay2 = dep_time - sched_dep_time) %>%
   filter(dep_delay2 != dep_delay) %>%
-  select(dep_time, sched_dep_time, dep_delay, dep_delay2)
-
+  select(dep_time, sched_dep_time, dep_delay, dep_delay2) 
+?flights  
 ```
 
 4) Find the 10 most delayed flights using a ranking function. How do you want to handle ties? Carefully read the documentation for min_rank().
 ```{r}
 mutate(flights,
-       dep_delay_rank = min_rank(-dep_delay)) %>%
+       dep_delay_rank = min_rank(desc(dep_delay))) %>% 
   arrange(dep_delay_rank) %>% 
-  filter(dep_delay_rank <= 10) 
+  filter(dep_delay_rank <= 10)    
 ```
 
 5) What does 1:3 + 1:10 return? Why?
