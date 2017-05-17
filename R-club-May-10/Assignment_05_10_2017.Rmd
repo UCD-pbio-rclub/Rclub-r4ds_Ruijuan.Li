@@ -187,7 +187,7 @@ mutate(flights,
 
 6) What trigonometric functions does R provide?
 ```{r}
-# All the classics: cos, sin, tan, acos, asin, atan, plus a few others that are drive by numerical or computational issues
+# All the classics: cos, sin, tan, acos, asin, atan, plus a few others that are drive by numerical or computational issues 
 ```
 
 
