@@ -131,9 +131,9 @@ flights %>%
 # 3) What time of day should you fly if you want to avoid delays as much as possible?
 ```{r}
 flights %>% 
-  group_by(year, month, day) 
-
-colnames(flights)
+  group_by(year, month, day, time_hour) %>% 
+  summarise(delay = mean(arr_delay)) %>% 
+  arrange(delay) 
 ```
 
 # 4) For each destination, compute the total minutes of delay. For each, flight, compute the proportion of the total delay for its destination.
