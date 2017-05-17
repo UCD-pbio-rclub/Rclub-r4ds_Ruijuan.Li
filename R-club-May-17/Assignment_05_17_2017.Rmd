@@ -84,7 +84,7 @@ summary(flights)
 ```
 
 # 4) Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
-```{r}
+```{r} 
 tmp <- group_by(flights, year, month, day) %>% 
   summarise(cancel = sum(is.na(dep_delay) | is.na(arr_delay)),
             delay = mean(arr_delay, na.rm=T)) 
@@ -100,6 +100,12 @@ flights %>%
   summarise(n(), 
             delay = mean(arr_delay, na.rm=T)) %>% 
   arrange(desc(delay)) 
+
+flights %>% 
+  group_by(carrier, dest) %>%
+  summarise(n(), 
+            delay = mean(arr_delay, na.rm=T)) %>% 
+  arrange(desc(delay)) %>% 
 
 # when don't consider dest 
 flights %>% 
@@ -118,16 +124,16 @@ flights %>%
 
 ## 5.7.1 Exercises
 
-# 1) Refer back to the lists of useful mutate and filtering functions. Describe how each operation changes when you combine it with grouping.
+# 1) Refer back to the lists of useful mutate and filtering functions. Describe how each operation changes when you combine it with grouping. 
 ```{r}
-# mutate & filtering will work within each group. 
+# mutate & filtering will work within each group.  
 ```
 
 # 2) Which plane (tailnum) has the worst on-time record?
 ```{r}
 flights %>% 
   group_by(tailnum) %>% 
-  summarise(delay = mean(arr_delay)) %>%
+  summarise(delay = mean(arr_delay, na.rm=T)) %>%
   arrange(desc(delay)) 
 ```
 
@@ -135,7 +141,7 @@ flights %>%
 ```{r}
 flights %>% 
   group_by(year, month, day, time_hour) %>% 
-  summarise(delay = mean(arr_delay)) %>% 
+  summarise(delay = mean(arr_delay, na.rm=T)) %>% 
   arrange(delay) 
 ```
 
