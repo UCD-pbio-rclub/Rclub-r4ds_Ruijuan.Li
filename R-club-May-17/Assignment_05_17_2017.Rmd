@@ -163,7 +163,10 @@ flights %>%
 
 # 7) Find all destinations that are flown by at least two carriers. Use that information to rank the carriers.
 ```{r}
-
+flights %>% 
+  group_by(dest) %>% 
+  summarise(unique_carrier = length(unique(carrier))) %>% 
+            filter(unique_carrier >= 2)  
 ```
 
 # 8) For each plane, count the number of flights before the first delay of greater than 1 hour.
