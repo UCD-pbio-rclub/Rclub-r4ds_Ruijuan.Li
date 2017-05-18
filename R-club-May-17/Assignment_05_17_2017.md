@@ -310,29 +310,12 @@ summary(flights)
 # 4) Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
 
 ```r
-tmp <- group_by(flights, year, month, day) %>% 
+flights %>%
+group_by(year, month, day) %>%
   summarise(cancel = sum(is.na(dep_delay) | is.na(arr_delay)),
-            delay = mean(arr_delay, na.rm=T)) 
-
-cor.test(tmp$cancel, tmp$delay) # positively correlated
-```
-
-```
-## 
-## 	Pearson's product-moment correlation
-## 
-## data:  tmp$cancel and tmp$delay
-## t = 15.742, df = 363, p-value < 2.2e-16
-## alternative hypothesis: true correlation is not equal to 0
-## 95 percent confidence interval:
-##  0.5716923 0.6942221
-## sample estimates:
-##      cor 
-## 0.636963
-```
-
-```r
-plot(tmp$cancel, tmp$delay)
+            delay = mean(arr_delay, na.rm=T)) %>%
+  ggplot(aes(x=delay, y=cancel)) +
+  geom_point()
 ```
 
 ![](Assignment_05_17_2017_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
@@ -495,13 +478,12 @@ flights %>%
 # 5) Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using lag() explore how the delay of a flight is related to the delay of the immediately preceding flight.
 
 ```r
-# ah, this is more complicated... 
 flights %>% 
   filter(!is.na(air_time)) %>% 
   mutate(previous_delay = lag(arr_delay)) %>%  
   filter(!is.na(previous_delay) & !is.na(arr_delay)) %>%
   ggplot(aes(x=arr_delay, y=previous_delay)) + 
-  geom_point()
+  geom_point() 
 ```
 
 ![](Assignment_05_17_2017_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
@@ -538,7 +520,7 @@ flights %>%
   group_by(dest) %>% 
   summarise(unique_carrier = length(unique(carrier))) %>% 
             filter(unique_carrier >= 2)  %>% 
-  arrange(desc(unique_carrier))
+  arrange(desc(unique_carrier)) 
 ```
 
 ```
@@ -560,6 +542,9 @@ flights %>%
 
 # 8) For each plane, count the number of flights before the first delay of greater than 1 hour.
 
+```r
+# don't understand the question 
+```
 
 
 

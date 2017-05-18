@@ -84,13 +84,13 @@ summary(flights)
 ```
 
 # 4) Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
-```{r} 
-tmp <- group_by(flights, year, month, day) %>% 
+```{r}
+flights %>%
+group_by(year, month, day) %>%
   summarise(cancel = sum(is.na(dep_delay) | is.na(arr_delay)),
-            delay = mean(arr_delay, na.rm=T)) 
-
-cor.test(tmp$cancel, tmp$delay) # positively correlated
-plot(tmp$cancel, tmp$delay)
+            delay = mean(arr_delay, na.rm=T)) %>%
+  ggplot(aes(x=delay, y=cancel)) +
+  geom_point()
 ```
 
 # 5) Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights %>% group_by(carrier, dest) %>% summarise(n()))
@@ -158,14 +158,12 @@ flights %>%
 
 # 5) Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using lag() explore how the delay of a flight is related to the delay of the immediately preceding flight.
 ```{r}
-# ah, this is more complicated... 
 flights %>% 
   filter(!is.na(air_time)) %>% 
   mutate(previous_delay = lag(arr_delay)) %>%  
   filter(!is.na(previous_delay) & !is.na(arr_delay)) %>%
   ggplot(aes(x=arr_delay, y=previous_delay)) + 
-  geom_point()
-
+  geom_point() 
 ```
 
 # 6) Look at each destination. Can you find flights that are suspiciously fast? (i.e. flights that represent a potential data entry error). Compute the air time a flight relative to the shortest flight to that destination. Which flights were most delayed in the air?
@@ -181,14 +179,12 @@ flights %>%
   group_by(dest) %>% 
   summarise(unique_carrier = length(unique(carrier))) %>% 
             filter(unique_carrier >= 2)  %>% 
-  arrange(desc(unique_carrier))
-  
-
+  arrange(desc(unique_carrier)) 
 ```
 
 # 8) For each plane, count the number of flights before the first delay of greater than 1 hour.
 ```{r}
-
+# don't understand the question 
 ```
 
 
