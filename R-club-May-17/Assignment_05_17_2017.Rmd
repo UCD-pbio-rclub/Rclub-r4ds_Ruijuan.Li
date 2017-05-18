@@ -95,24 +95,24 @@ plot(tmp$cancel, tmp$delay)
 
 # 5) Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights %>% group_by(carrier, dest) %>% summarise(n()))
 ```{r}
-flights %>% 
-  group_by(carrier, dest) %>%
-  summarise(n(), 
-            delay = mean(arr_delay, na.rm=T)) %>% 
-  arrange(desc(delay)) 
-
-flights %>% 
-  group_by(carrier, dest) %>%
-  summarise(n(), 
-            delay = mean(arr_delay, na.rm=T)) %>% 
-  arrange(desc(delay)) %>% 
-
-# when don't consider dest 
-flights %>% 
-  group_by(carrier) %>%
-  summarise(n(), 
-            delay = mean(arr_delay, na.rm=T)) %>% 
-  arrange(desc(delay)) 
+# flights %>%
+#   group_by(carrier, dest) %>%
+#   summarise(n(),
+#             delay = mean(arr_delay, na.rm=T)) %>%
+#   arrange(desc(delay)) 
+# 
+# flights %>%  
+#   group_by(carrier, dest) %>% 
+#   summarise(n(), 
+#             delay = mean(arr_delay, na.rm=T)) %>% 
+#   arrange(desc(delay)) %>% 
+# 
+# # when don't consider dest 
+# flights %>% 
+#   group_by(carrier) %>%
+#   summarise(n(), 
+#             delay = mean(arr_delay, na.rm=T)) %>% 
+#   arrange(desc(delay)) 
 # F9 has the worst delay  
 ```
 
@@ -140,7 +140,7 @@ flights %>%
 # 3) What time of day should you fly if you want to avoid delays as much as possible?
 ```{r}
 flights %>% 
-  group_by(year, month, day, time_hour) %>% 
+  group_by(year, month, time_hour) %>% 
   summarise(delay = mean(arr_delay, na.rm=T)) %>% 
   arrange(delay) 
 ```
@@ -149,7 +149,7 @@ flights %>%
 ```{r}
 flights %>% 
   group_by(dest) %>%
-  summarise(sum(arr_delay, na.rm=T))
+  summarise(sum(arr_delay, na.rm=T)) 
 
 flights %>% 
   group_by(flight) %>% 
@@ -159,7 +159,12 @@ flights %>%
 # 5) Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using lag() explore how the delay of a flight is related to the delay of the immediately preceding flight.
 ```{r}
 # ah, this is more complicated... 
-
+flights %>% 
+  filter(!is.na(air_time)) %>% 
+  mutate(previous_delay = lag(arr_delay)) %>%  
+  filter(!is.na(previous_delay) & !is.na(arr_delay)) %>%
+  ggplot(aes(x=arr_delay, y=previous_delay)) + 
+  geom_point()
 
 ```
 
@@ -175,7 +180,10 @@ flights %>%
 flights %>% 
   group_by(dest) %>% 
   summarise(unique_carrier = length(unique(carrier))) %>% 
-            filter(unique_carrier >= 2)  
+            filter(unique_carrier >= 2)  %>% 
+  arrange(desc(unique_carrier))
+  
+
 ```
 
 # 8) For each plane, count the number of flights before the first delay of greater than 1 hour.

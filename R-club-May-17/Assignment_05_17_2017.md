@@ -340,64 +340,24 @@ plot(tmp$cancel, tmp$delay)
 # 5) Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights %>% group_by(carrier, dest) %>% summarise(n()))
 
 ```r
-flights %>% 
-  group_by(carrier, dest) %>%
-  summarise(n(), 
-            delay = mean(arr_delay, na.rm=T)) %>% 
-  arrange(desc(delay)) 
-```
-
-```
-## Source: local data frame [314 x 4]
-## Groups: carrier [16]
-## 
-##    carrier  dest `n()`     delay
-##      <chr> <chr> <int>     <dbl>
-## 1       UA   STL     2 110.00000
-## 2       OO   ORD     1 107.00000
-## 3       OO   DTW     2  68.50000
-## 4       UA   RDU     1  56.00000
-## 5       EV   CAE   113  42.80583
-## 6       EV   TYS   323  41.15016
-## 7       EV   PBI     6  40.66667
-## 8       EV   TUL   315  33.65986
-## 9       EV   OKC   346  30.61905
-## 10      UA   JAC    23  29.89474
-## # ... with 304 more rows
-```
-
-```r
-# when don't consider dest 
-flights %>% 
-  group_by(carrier) %>%
-  summarise(n(), 
-            delay = mean(arr_delay, na.rm=T)) %>% 
-  arrange(desc(delay)) 
-```
-
-```
-## # A tibble: 16 × 3
-##    carrier `n()`      delay
-##      <chr> <int>      <dbl>
-## 1       F9   685 21.9207048
-## 2       FL  3260 20.1159055
-## 3       EV 54173 15.7964311
-## 4       YV   601 15.5569853
-## 5       OO    32 11.9310345
-## 6       MQ 26397 10.7747334
-## 7       WN 12275  9.6491199
-## 8       B6 54635  9.4579733
-## 9       9E 18460  7.3796692
-## 10      UA 58665  3.5580111
-## 11      US 20536  2.1295951
-## 12      VX  5162  1.7644644
-## 13      DL 48110  1.6443409
-## 14      AA 32729  0.3642909
-## 15      HA   342 -6.9152047
-## 16      AS   714 -9.9308886
-```
-
-```r
+# flights %>%
+#   group_by(carrier, dest) %>%
+#   summarise(n(),
+#             delay = mean(arr_delay, na.rm=T)) %>%
+#   arrange(desc(delay)) 
+# 
+# flights %>%  
+#   group_by(carrier, dest) %>% 
+#   summarise(n(), 
+#             delay = mean(arr_delay, na.rm=T)) %>% 
+#   arrange(desc(delay)) %>% 
+# 
+# # when don't consider dest 
+# flights %>% 
+#   group_by(carrier) %>%
+#   summarise(n(), 
+#             delay = mean(arr_delay, na.rm=T)) %>% 
+#   arrange(desc(delay)) 
 # F9 has the worst delay  
 ```
 
@@ -424,10 +384,10 @@ flights %>%
 
 ## 5.7.1 Exercises
 
-# 1) Refer back to the lists of useful mutate and filtering functions. Describe how each operation changes when you combine it with grouping.
+# 1) Refer back to the lists of useful mutate and filtering functions. Describe how each operation changes when you combine it with grouping. 
 
 ```r
-# mutate & filtering will work within each group. 
+# mutate & filtering will work within each group.  
 ```
 
 # 2) Which plane (tailnum) has the worst on-time record?
@@ -435,7 +395,7 @@ flights %>%
 ```r
 flights %>% 
   group_by(tailnum) %>% 
-  summarise(delay = mean(arr_delay)) %>%
+  summarise(delay = mean(arr_delay, na.rm=T)) %>%
   arrange(desc(delay)) 
 ```
 
@@ -460,27 +420,27 @@ flights %>%
 
 ```r
 flights %>% 
-  group_by(year, month, day, time_hour) %>% 
-  summarise(delay = mean(arr_delay)) %>% 
+  group_by(year, month, time_hour) %>% 
+  summarise(delay = mean(arr_delay, na.rm=T)) %>% 
   arrange(delay) 
 ```
 
 ```
-## Source: local data frame [6,936 x 5]
-## Groups: year, month, day [365]
+## Source: local data frame [6,936 x 4]
+## Groups: year, month [12]
 ## 
-##     year month   day           time_hour     delay
-##    <int> <int> <int>              <dttm>     <dbl>
-## 1   2013     9    24 2013-09-24 23:00:00 -32.00000
-## 2   2013     3    15 2013-03-15 05:00:00 -30.20000
-## 3   2013     9    15 2013-09-15 05:00:00 -29.00000
-## 4   2013     4     8 2013-04-08 23:00:00 -28.33333
-## 5   2013     5    14 2013-05-14 23:00:00 -28.00000
-## 6   2013     9    28 2013-09-28 19:00:00 -27.80000
-## 7   2013     5    14 2013-05-14 05:00:00 -26.80000
-## 8   2013     9     7 2013-09-07 21:00:00 -26.60000
-## 9   2013     8    28 2013-08-28 05:00:00 -26.20000
-## 10  2013     9     7 2013-09-07 17:00:00 -26.04348
+##     year month           time_hour     delay
+##    <int> <int>              <dttm>     <dbl>
+## 1   2013     9 2013-09-24 23:00:00 -32.00000
+## 2   2013     3 2013-03-15 05:00:00 -30.20000
+## 3   2013     9 2013-09-15 05:00:00 -29.00000
+## 4   2013     4 2013-04-08 23:00:00 -28.33333
+## 5   2013     5 2013-05-14 23:00:00 -28.00000
+## 6   2013     9 2013-09-28 19:00:00 -27.80000
+## 7   2013     5 2013-05-14 05:00:00 -26.80000
+## 8   2013     9 2013-09-07 21:00:00 -26.60000
+## 9   2013     8 2013-08-28 05:00:00 -26.20000
+## 10  2013     9 2013-09-07 17:00:00 -26.04348
 ## # ... with 6,926 more rows
 ```
 
@@ -489,7 +449,7 @@ flights %>%
 ```r
 flights %>% 
   group_by(dest) %>%
-  summarise(sum(arr_delay, na.rm=T))
+  summarise(sum(arr_delay, na.rm=T)) 
 ```
 
 ```
@@ -536,7 +496,15 @@ flights %>%
 
 ```r
 # ah, this is more complicated... 
+flights %>% 
+  filter(!is.na(air_time)) %>% 
+  mutate(previous_delay = lag(arr_delay)) %>%  
+  filter(!is.na(previous_delay) & !is.na(arr_delay)) %>%
+  ggplot(aes(x=arr_delay, y=previous_delay)) + 
+  geom_point()
 ```
+
+![](Assignment_05_17_2017_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 # 6) Look at each destination. Can you find flights that are suspiciously fast? (i.e. flights that represent a potential data entry error). Compute the air time a flight relative to the shortest flight to that destination. Which flights were most delayed in the air?
 
@@ -569,7 +537,8 @@ flights %>%
 flights %>% 
   group_by(dest) %>% 
   summarise(unique_carrier = length(unique(carrier))) %>% 
-            filter(unique_carrier >= 2)  
+            filter(unique_carrier >= 2)  %>% 
+  arrange(desc(unique_carrier))
 ```
 
 ```
@@ -577,15 +546,15 @@ flights %>%
 ##     dest unique_carrier
 ##    <chr>          <int>
 ## 1    ATL              7
-## 2    AUS              6
-## 3    AVL              2
-## 4    BDL              2
-## 5    BGR              2
-## 6    BNA              5
-## 7    BOS              7
-## 8    BQN              2
-## 9    BTV              3
-## 10   BUF              4
+## 2    BOS              7
+## 3    CLT              7
+## 4    ORD              7
+## 5    TPA              7
+## 6    AUS              6
+## 7    DCA              6
+## 8    DTW              6
+## 9    IAD              6
+## 10   MSP              6
 ## # ... with 66 more rows
 ```
 
