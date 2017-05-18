@@ -174,7 +174,7 @@ flights %>%
 ```
 
 # 7) Find all destinations that are flown by at least two carriers. Use that information to rank the carriers.
-```{r}
+```{r} 
 flights %>% 
   group_by(dest) %>% 
   summarise(unique_carrier = length(unique(carrier))) %>% 
@@ -184,8 +184,16 @@ flights %>%
 
 # 8) For each plane, count the number of flights before the first delay of greater than 1 hour.
 ```{r}
-# don't understand the question 
+# don't understand the question  
 ```
+
+# note
+```{r}
+# ctrl + shift + 1/2/3/4 to enlarge different panel 
+# ctrl + shift + m give the pipe sign %>%  
+# summary: group_by(), summarise(), arrange(), and filter(), and %>% are important tools to use. also the n() or hiding n() fxn in summarise() is very useful 
+```
+
 
 
 
