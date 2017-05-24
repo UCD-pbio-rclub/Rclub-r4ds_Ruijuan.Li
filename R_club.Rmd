@@ -562,6 +562,56 @@ not_cancelled %>%
 
 not_cancelled %>% 
   count(tailnum)
+```
+
+# 05-23-2017 
+```{r}
+library(tidyverse)
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+
+diamonds %>% 
+  count(cut)
+
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+
+diamonds %>% 
+  count(cut_width(carat, 0.5)) # this is very useful, can be used in window size... 
+
+summary(diamonds)
+
+smaller <- diamonds %>% 
+  filter(carat < 3)
+  
+ggplot(data = smaller, mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.1)
+
+ggplot(data = smaller, mapping = aes(x = carat, colour = cut)) +
+  geom_freqpoly(binwidth = 0.1) # this can be useful for my data analysis 
+
+ggplot(data = faithful, mapping = aes(x = eruptions)) + 
+  geom_histogram(binwidth = 0.25)
+
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
+  coord_cartesian(ylim = c(0, 50)) # zoom in to see outliners 
+
+unusual <- diamonds %>% 
+  filter(y < 3 | y > 20) %>% 
+  select(price, x, y, z) %>%
+  arrange(y)
+unusual
+
+summary(diamonds)
+sample(1:594, 1, replace = F) # pick a question from leetcode... 
+ 
+diamonds2 <- diamonds %>% 
+  mutate(y = ifelse(y < 3 | y > 20, NA, y))
+
 
 
 

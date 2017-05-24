@@ -1,0 +1,112 @@
+---
+title: "Assignment_05_23_2017"
+author: "Ruijuan Li"
+date: "5/23/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+7.3.4 Exercises
+
+Explore the distribution of each of the x, y, and z variables in diamonds. What do you learn? Think about a diamond and how you might decide which dimension is the length, width, and depth.
+```{r}
+library(tidyverse)
+summary(diamonds)
+
+ggplot(diamonds) + geom_histogram(mapping = aes(x=x), binwidth = 0.5)
+ggplot(diamonds) + geom_histogram(mapping = aes(x=y), binwidth = 0.5)
+
+ggplot(diamonds) + geom_histogram(mapping = aes(x=y), binwidth = 0.5) +  coord_cartesian(ylim = c(0, 50))
+
+ggplot(diamonds) + geom_histogram(mapping = aes(x=z), binwidth = 0.5) + coord_cartesian(ylim = c(0, 2500))
+
+ggplot(diamonds) + geom_histogram(mapping = aes(x=z)) + coord_cartesian(ylim = c(0, 2500))
+
+# not very familiar with diamond... 
+```
+
+Explore the distribution of price. Do you discover anything unusual or surprising? (Hint: Carefully think about the binwidth and make sure you try a wide range of values.)
+```{r}
+ggplot(diamonds) + geom_histogram(aes(x=price), binwidth = 1000)
+
+diamonds %>% 
+  count(cut_width(price, 1000)) 
+?cut_width 
+
+# most of the diamond's price fall between 500 to 1.5e+03
+ggplot(diamonds) + geom_histogram(aes(x=price), binwidth = 100)
+diamond_price_bin_100 <- diamonds %>% 
+  count(cut_width(price, 100)) 
+
+head(diamond_price_bin_100, 20)
+
+# when have smaller bin, price ranged from 1450 to 1550 have suprisingly samll number of diamond 
+
+ggplot(diamonds) + geom_histogram(aes(x=price), binwidth = 10)
+# for a specific range, there is no diamond in that price range 
+# zoom in 
+ggplot(diamonds) + geom_histogram(aes(x=price), binwidth = 10) +  coord_cartesian(xlim = c(0, 2000))
+
+ggplot(diamonds) + geom_histogram(aes(x=price)) +  coord_cartesian(xlim = c(0, 2000))
+
+
+# no diamond is the price range around 1500, why? 
+```
+
+How many diamonds are 0.99 carat? How many are 1 carat? What do you think is the cause of the difference?
+```{r}
+ggplot(diamonds) + geom_histogram(mapping = aes(x=carat), binwidth = 0.01)
+diamonds %>% 
+  filter(carat == 0.99) %>%
+    count()
+
+diamonds %>% 
+  filter(carat == 1) %>%
+    count()
+
+# people like 1 carate diamond 
+```
+
+Compare and contrast coord_cartesian() vs xlim() or ylim() when zooming in on a histogram. What happens if you leave binwidth unset? What happens if you try and zoom so only half a bar shows?
+```{r}
+# see above, when you don't set binwidth, the default is bins = 30 
+```
+
+7.4.1 Exercises
+
+What happens to missing values in a histogram? What happens to missing values in a bar chart? Why is there a difference?
+```{r}
+diamonds2 <- diamonds %>% 
+  mutate(y = ifelse(y < 3 | y > 20, NA, y))
+
+summary(diamonds2)
+
+ggplot(data = diamonds2, mapping = aes(x = y)) + 
+  geom_histogram(binwidth = 0.01)
+
+ggplot(data = diamonds2, mapping = aes(x = carat, y = y)) + 
+  geom_col()
+
+# geom_col remove them bc they are missing, geom_histogram remove them because they are not finite values 
+```
+
+What does na.rm = TRUE do in mean() and sum()?
+```{r}
+numbers <- seq(1:100)
+numbers
+missing_data <- rep(NA, 10)
+all <- c(numbers, missing_data)
+all
+
+mean(all)
+mean(all, na.rm = T)
+
+sum(all)
+sum(all, na.rm = T)
+# na.rm remove the missing value & their position in the data. so mean is only the mean of non-missing data devided by the number of non-missing data. 
+```
+
+
+
+
