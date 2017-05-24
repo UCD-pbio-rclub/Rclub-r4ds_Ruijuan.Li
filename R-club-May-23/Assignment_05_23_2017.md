@@ -651,7 +651,7 @@ One problem with boxplots is that they were developed in an era of much smaller 
 # library("lvplot")
 # ggplot(diamonds, aes(x = cut, y = price)) +
 #   geom_lv()
-# package incompatibility, will fix later... 
+# package incompatibility, will fix later...  
 ```
 
 Compare and contrast geom_violin() with a facetted geom_histogram(), or a coloured geom_freqpoly(). What are the pros and cons of each method?
@@ -680,23 +680,159 @@ How could you rescale the count dataset above to more clearly show the distribut
 
 Use geom_tile() together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?
 
+```r
+library(nycflights13)
+```
+
+```
+## Warning: package 'nycflights13' was built under R version 3.2.5
+```
+
+```r
+flights %>%
+  group_by(month, dest) %>%
+  summarise(dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(month), y = dest, fill = dep_delay)) +
+  geom_tile() +
+  labs(x = "Month", y = "Destination", fill = "Departure Delay")
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+```r
+# missing value, better color scheme 
+
+library("viridis")
+```
+
+```
+## Warning: package 'viridis' was built under R version 3.2.5
+```
+
+```
+## Loading required package: viridisLite
+```
+
+```
+## Warning: package 'viridisLite' was built under R version 3.2.5
+```
+
+```r
+flights %>%
+  group_by(month, dest) %>%
+  summarise(dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(month), y = dest, fill = dep_delay)) +
+  geom_tile() +
+  scale_fill_viridis() +
+  labs(x = "Month", y = "Destination", fill = "Departure Delay") 
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-14-2.png)<!-- -->
+
+```r
+# also need to reorder 
+```
 
 Why is it slightly better to use aes(x = color, y = cut) rather than aes(x = cut, y = color) in the example above?
 
+```r
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = n))
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+```r
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(mapping = aes(x = cut, y = color)) +
+    geom_tile(mapping = aes(fill = n))
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-15-2.png)<!-- -->
+
+```r
+# why??? 
+```
 
 7.5.3.1 Exercises
 
 Instead of summarising the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using cut_width() vs cut_number()? How does that impact a visualisation of the 2d distribution of carat and price?
 
+```r
+ggplot(data = diamonds, 
+       mapping = aes(x = price,
+                     colour = cut_width(carat, 0.3))) +
+  geom_freqpoly()
+```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+
+```r
+ggplot(data = diamonds, 
+       mapping = aes(x = price,
+                     colour = cut_number(carat, 3))) +
+  geom_freqpoly()
+```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-16-2.png)<!-- -->
+
+```r
+# cut_width define the bin size, cut_number define the number within each bin 
+```
 
 Visualise the distribution of carat, partitioned by price.
 
+```r
+ggplot(diamonds, aes(x = cut_width(price, 1000), y = carat)) +
+  geom_boxplot() +
+  coord_flip() +
+  xlab("Price") 
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 How does the price distribution of very large diamonds compare to small diamonds. Is it as you expect, or does it surprise you?
 
+```r
+ggplot(diamonds, aes(x = cut_width(carat, 0.5), y = price)) +
+  geom_boxplot() +
+  coord_flip()
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+```r
+# very large diamond are always expensive 
+```
 
 Combine two of the techniques you’ve learned to visualise the combined distribution of cut, carat, and price.
 
+```r
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point() +
+  facet_wrap(~ cut, ncol = 1)
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
+```r
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_hex() +
+  facet_wrap(~ cut, ncol = 1)
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-19-2.png)<!-- -->
 
 Two dimensional plots reveal outliers that are not visible in one dimensional plots. For example, some points in the plot below have an unusual combination of x and y values, which makes the points outliers even though their x and y values appear normal when examined separately.
 
