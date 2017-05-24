@@ -107,6 +107,141 @@ sum(all, na.rm = T)
 # na.rm remove the missing value & their position in the data. so mean is only the mean of non-missing data devided by the number of non-missing data. 
 ```
 
+7.5.1.1 Exercises
 
+Use what you’ve learned to improve the visualisation of the departure times of cancelled vs. non-cancelled flights.
+```{r}
+# data
+new <- 
+  nycflights13::flights %>% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) 
 
+# the original 
+ggplot(new, mapping = aes(sched_dep_time)) + 
+    geom_freqpoly(mapping = aes(colour = cancelled), binwidth = 1/4)
+
+# improved 
+ggplot(new, mapping = aes(sched_dep_time, y = ..density..)) + 
+    geom_freqpoly(mapping = aes(colour = cancelled), binwidth = 1/4)
+```
+
+What variable in the diamonds dataset is most important for predicting the price of a diamond? How is that variable correlated with cut? Why does the combination of those two relationships lead to lower quality diamonds being more expensive?
+```{r}
+library(reshape2)
+summary(diamonds) 
+
+diamonds.melt <- melt(diamonds, id.vars = "price")
+head(diamonds.melt)
+dim(diamonds.melt)
+
+# ggplot(diamonds.melt, mapping = aes(price, y = value)) + 
+#    geom_point() + facet_wrap(~variable)
+
+# not a good way 
+cor(diamonds$price, diamonds$carat)
+cor(diamonds$price, diamonds$depth)
+cor(diamonds$price, diamonds$table)
+cor(diamonds$price, diamonds$x)
+cor(diamonds$price, diamonds$y)
+cor(diamonds$price, diamonds$z)
+
+# carat has the highest correlation with price 
+ggplot(data = diamonds, mapping = aes(x = cut, y = carat)) +
+  geom_boxplot()
+# the good diamond don't have high carat, higher carate diamond sells expensive 
+```
+
+Install the ggstance package, and create a horizontal boxplot. How does this compare to using coord_flip()?
+```{r}
+# install.packages("ggstance")
+library(ggstance)
+
+# with coord_flip
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
+  coord_flip()
+
+# with ggstance
+ggplot(data = mpg) +
+  geom_boxploth(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy))
+
+ggplot(data = mpg) +
+  geom_boxploth(mapping = aes(y = reorder(class, hwy, FUN = median), x = hwy))
+
+# just need to flip the x & y coordinate 
+```
+
+One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of “outlying values”. One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using geom_lv() to display the distribution of price vs cut. What do you learn? How do you interpret the plots?
+```{r}
+#install.packages("lvplot")
+
+# library("lvplot")
+# ggplot(diamonds, aes(x = cut, y = price)) +
+#   geom_lv()
+# package incompatibility, will fix later... 
+```
+
+Compare and contrast geom_violin() with a facetted geom_histogram(), or a coloured geom_freqpoly(). What are the pros and cons of each method?
+```{r}
+# discuss in class 
+```
+
+If you have a small dataset, it’s sometimes useful to use geom_jitter() to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to geom_jitter(). List them and briefly describe what each one does.
+```{r}
+# install.packages("ggbeeswarm")
+library(ggbeeswarm)
+```
+
+[see the examples] (https://jrnold.github.io/e4qf/exploratory-data-analysis.html#a-categorical-and-continuous-variable)
+
+7.5.2.1 Exercises
+
+How could you rescale the count dataset above to more clearly show the distribution of cut within colour, or colour within cut?
+```{r}
+
+```
+
+Use geom_tile() together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?
+```{r}
+
+```
+
+Why is it slightly better to use aes(x = color, y = cut) rather than aes(x = cut, y = color) in the example above?
+```{r}
+
+```
+
+7.5.3.1 Exercises
+
+Instead of summarising the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using cut_width() vs cut_number()? How does that impact a visualisation of the 2d distribution of carat and price?
+```{r}
+
+```
+
+Visualise the distribution of carat, partitioned by price.
+```{r}
+
+```
+
+How does the price distribution of very large diamonds compare to small diamonds. Is it as you expect, or does it surprise you?
+```{r}
+
+```
+
+Combine two of the techniques you’ve learned to visualise the combined distribution of cut, carat, and price.
+```{r}
+
+```
+
+Two dimensional plots reveal outliers that are not visible in one dimensional plots. For example, some points in the plot below have an unusual combination of x and y values, which makes the points outliers even though their x and y values appear normal when examined separately.
+
+Why is a scatterplot a better display than a binned plot for this case?
+```{r}
+
+```
 

@@ -612,7 +612,42 @@ sample(1:594, 1, replace = F) # pick a question from leetcode...
 diamonds2 <- diamonds %>% 
   mutate(y = ifelse(y < 3 | y > 20, NA, y))
 
+ggplot(data = diamonds2, mapping = aes(x = x, y = y)) + 
+  geom_point()
 
+nycflights13::flights %>% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) %>% 
+  ggplot(mapping = aes(sched_dep_time)) + 
+    geom_freqpoly(mapping = aes(colour = cancelled), binwidth = 1/4)
+
+ggplot(data = diamonds, mapping = aes(x = price, y = ..density..)) + 
+  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500) # this can be useful for my data 
+
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_boxplot() # geom box plot can be useful 
+
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
+  geom_boxplot()
+
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) # reorder based on median value of 
+
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
+  coord_flip()
+
+diamonds %>% 
+  count(color, cut)
+
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = n))
 
 
 ```
