@@ -724,10 +724,22 @@ flights %>%
   ggplot(aes(x = factor(month), y = dest, fill = dep_delay)) +
   geom_tile() +
   scale_fill_viridis() +
-  labs(x = "Month", y = "Destination", fill = "Departure Delay") 
+  labs(x = "Month", y = "Destination", fill = "Departure Delay")
 ```
 
 ![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-14-2.png)<!-- -->
+
+```r
+flights %>%
+  group_by(month, dest) %>%
+  summarise(dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(month), y = dest, fill = dep_delay)) +
+  geom_tile() +
+  scale_fill_gradient2(low="green", high="red") +
+  labs(x = "Month", y = "Destination", fill = "Departure Delay") 
+```
+
+![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-14-3.png)<!-- -->
 
 ```r
 # also need to reorder 
@@ -788,7 +800,7 @@ ggplot(data = diamonds,
 ![](Assignment_05_23_2017_files/figure-html/unnamed-chunk-16-2.png)<!-- -->
 
 ```r
-# cut_width define the bin size, cut_number define the number within each bin 
+# cut_width define the bin size, cut_number define the number of bins 
 ```
 
 Visualise the distribution of carat, partitioned by price.
