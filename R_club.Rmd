@@ -649,6 +649,13 @@ diamonds %>%
   ggplot(mapping = aes(x = color, y = cut)) +
     geom_tile(mapping = aes(fill = n))
 
+# install.packages("hexbin")
+library(hexbin)
+ggplot(data = smaller) +
+  geom_bin2d(mapping = aes(x = carat, y = price))
+
+ggplot(data = smaller) +
+  geom_hex(mapping = aes(x = carat, y = price))
 
 ```
 
