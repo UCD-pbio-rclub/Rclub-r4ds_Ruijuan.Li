@@ -771,9 +771,84 @@ read_csv("1,2,3\n4,5,6", col_names = FALSE)
 
 read_csv("a,b,c\n1,2,.", na = ".")
 
+### parse vector 
+# number 
+parse_double("1.23")
+parse_double("1,23", locale = locale(decimal_mark = ","))
 
+parse_number("$100")
+parse_number("20%")
+parse_number("It cost $123.45") # these can be very useful in data parsing... 
 
+# Used in America
+parse_number("$123,456,789")
+#> [1] 1.23e+08
 
+# Used in many parts of Europe
+parse_number("123.456.789", locale = locale(grouping_mark = "."))
+#> [1] 1.23e+08
+
+# Used in Switzerland
+parse_number("123'456'789", locale = locale(grouping_mark = "'"))
+#> [1] 1.23e+08 
+# the above can be useful for collaboration... 
+
+# string 
+x1 <- "El Ni\xf1o was particularly bad this year"
+x2 <- "\x82\xb1\x82\xf1\x82\xc9\x82\xbf\x82\xcd"
+
+x1
+#> [1] "El Ni\xf1o was particularly bad this year"
+x2
+#> [1] "\x82\xb1\x82\xf1\x82ɂ\xbf\x82\xcd"
+
+parse_character(x1, locale = locale(encoding = "Latin1"))
+#> [1] "El Niño was particularly bad this year"
+parse_character(x2, locale = locale(encoding = "Shift-JIS"))
+#> [1] "こんにちは"
+
+# use guess_encoding 
+guess_encoding(charToRaw(x1))
+#> # A tibble: 2 × 2
+#>     encoding confidence
+#>        <chr>      <dbl>
+#> 1 ISO-8859-1       0.46
+#> 2 ISO-8859-9       0.23
+guess_encoding(charToRaw(x2))
+#> # A tibble: 1 × 2
+#>   encoding confidence
+#>      <chr>      <dbl>
+#> 1   KOI8-R       0.42
+
+#### Factors 
+fruit <- c("apple", "banana")
+parse_factor(c("apple", "banana", "bananana"), levels = fruit)
+
+fruit <- c("apple", "banana", "bananana")
+parse_factor(c("apple", "banana", "bananana"), levels = fruit)
+
+# Dates, date-times, and times 
+parse_datetime("2010-10-01T2010")
+#> [1] "2010-10-01 20:10:00 UTC"
+# If time is omitted, it will be set to midnight
+parse_datetime("20101010")
+#> [1] "2010-10-10 UTC"
+
+library(hms)
+parse_time("01:10 am")
+#> 01:10:00
+parse_time("20:10:01")
+#> 20:10:01
+
+parse_date("01/02/15", "%m/%d/%y")
+#> [1] "2015-01-02"
+parse_date("01/02/15", "%d/%m/%y")
+#> [1] "2015-02-01"
+parse_date("01/02/15", "%y/%m/%d")
+#> [1] "2001-02-15"
+
+# Other Types of Data
+# many useful packages to extract information from different type of data 
 
 
 ```

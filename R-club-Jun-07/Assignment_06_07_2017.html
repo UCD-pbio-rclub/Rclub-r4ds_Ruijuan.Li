@@ -140,20 +140,155 @@ $(document).ready(function () {
 <p>read_delim(file, delim = “|”)</p></li>
 <li><p>Apart from file, skip, and comment, what other arguments do read_csv() and read_tsv() have in common?</p>
 <p>read_csv(file, col_names = TRUE, col_types = NULL, locale = default_locale(), na = c(“”, “NA”), quoted_na = TRUE, quote = “&quot;”, comment = “”, trim_ws = TRUE, skip = 0, n_max = Inf, guess_max = min(1000, n_max), progress = show_progress())</p>
-<p>read_tsv(file, col_names = TRUE, col_types = NULL, locale = default_locale(), na = c(“”, “NA”), quoted_na = TRUE, quote = “&quot;”, comment = “”, trim_ws = TRUE, skip = 0, n_max = Inf, guess_max = min(1000, n_max), progress = show_progress())</p></li>
+<p>read_tsv(file, col_names = TRUE, col_types = NULL, locale = default_locale(), na = c(“”, “NA”), quoted_na = TRUE, quote = “&quot;”, comment = “”, trim_ws = TRUE, skip = 0, n_max = Inf, guess_max = min(1000, n_max), progress = show_progress())</p>
+<p>delim; col_names; na; trim_ws, etc.</p></li>
 <li><p>What are the most important arguments to read_fwf()?</p>
-<p>read_fwf(file, col_positions, col_types = NULL, locale = default_locale(), na = c(“”, “NA”), comment = “”, skip = 0, n_max = Inf, guess_max = min(n_max, 1000), progress = show_progress())</p></li>
-<li><p>Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like &quot; or ’. By convention, read_csv() assumes that the quoting character will be “, and if you want to change it you’ll need to use read_delim() instead. What arguments do you need to specify to read the following text into a data frame?</p></li>
+<p>read_fwf(file, col_positions, col_types = NULL, locale = default_locale(), na = c(“”, “NA”), comment = “”, skip = 0, n_max = Inf, guess_max = min(n_max, 1000), progress = show_progress())</p>
+<p>col_positions; widths; start, end…</p></li>
 </ol>
-<pre class="r"><code>&quot;x,y\n1,'a,b'&quot;</code></pre>
+<pre class="r"><code>fwf_sample &lt;- readr_example(&quot;fwf-sample.txt&quot;)
+cat(read_lines(fwf_sample))</code></pre>
+<pre><code>## John Smith          WA        418-Y11-4111 Mary Hartford       CA        319-Z19-4341 Evan Nolan          IL        219-532-c301</code></pre>
+<pre class="r"><code># You can specify column positions in several ways:
+# 1. Guess based on position of empty columns
+read_fwf(fwf_sample, fwf_empty(fwf_sample, col_names = c(&quot;first&quot;, &quot;last&quot;, &quot;state&quot;, &quot;ssn&quot;)))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   first = col_character(),
+##   last = col_character(),
+##   state = col_character(),
+##   ssn = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   first     last state          ssn
+##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;
+## 1  John    Smith    WA 418-Y11-4111
+## 2  Mary Hartford    CA 319-Z19-4341
+## 3  Evan    Nolan    IL 219-532-c301</code></pre>
+<pre class="r"><code># 2. A vector of field widths
+read_fwf(fwf_sample, fwf_widths(c(20, 10, 12), c(&quot;name&quot;, &quot;state&quot;, &quot;ssn&quot;)))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   state = col_character(),
+##   ssn = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##            name state          ssn
+##           &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;
+## 1    John Smith    WA 418-Y11-4111
+## 2 Mary Hartford    CA 319-Z19-4341
+## 3    Evan Nolan    IL 219-532-c301</code></pre>
+<pre class="r"><code># 3. Paired vectors of start and end positions
+read_fwf(fwf_sample, fwf_positions(c(1, 30), c(10, 42), c(&quot;name&quot;, &quot;ssn&quot;)))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   ssn = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##         name          ssn
+##        &lt;chr&gt;        &lt;chr&gt;
+## 1 John Smith 418-Y11-4111
+## 2 Mary Hartf 319-Z19-4341
+## 3 Evan Nolan 219-532-c301</code></pre>
+<pre class="r"><code># 4. Named arguments with start and end positions
+read_fwf(fwf_sample, fwf_cols(name = c(1, 10), ssn = c(30, 42)))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   ssn = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##         name          ssn
+##        &lt;chr&gt;        &lt;chr&gt;
+## 1 John Smith 418-Y11-4111
+## 2 Mary Hartf 319-Z19-4341
+## 3 Evan Nolan 219-532-c301</code></pre>
+<pre class="r"><code># 5. Named arguments with column widths
+read_fwf(fwf_sample, fwf_cols(name = 20, state = 10, ssn = 12))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   state = col_character(),
+##   ssn = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##            name state          ssn
+##           &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;
+## 1    John Smith    WA 418-Y11-4111
+## 2 Mary Hartford    CA 319-Z19-4341
+## 3    Evan Nolan    IL 219-532-c301</code></pre>
+<pre class="r"><code># don't know how this can be useful for my analysis for this moment </code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like &quot; or ’. By convention, read_csv() assumes that the quoting character will be “, and if you want to change it you’ll need to use read_delim() instead. What arguments do you need to specify to read the following text into a data frame?</li>
+</ol>
+<pre class="r"><code>&quot;x,y\n1,'a,b'&quot;
+
+x &lt;- &quot;x,y\n1,'a,b'&quot;
+read_delim(x, &quot;,&quot;, quote = &quot;'&quot;)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Identify what is wrong with each of the following inline CSV files. What happens when you run the code?</li>
 </ol>
-<pre class="r"><code>read_csv(&quot;a,b\n1,2,3\n4,5,6&quot;)
-read_csv(&quot;a,b,c\n1,2\n1,2,3,4&quot;)
-read_csv(&quot;a,b\n\&quot;1&quot;)
-read_csv(&quot;a,b\n1,2\na,b&quot;)
-read_csv(&quot;a;b\n1;3&quot;)</code></pre>
+<pre class="r"><code>read_csv(&quot;a,b\n1,2,3\n4,5,6&quot;) # 3 and 6 could not be read bc. only two colomns
+read_csv(&quot;a,b,c\n1,2,3\n4,5,6&quot;) 
+
+read_csv(&quot;a,b,c\n1,2\n1,2,3,4&quot;) # same, incosistent row length
+read_csv(&quot;a,b\n\&quot;1&quot;) # same 
+read_csv(&quot;a,b\n1,2\na,b&quot;) # ???
+read_csv(&quot;a;b\n1;3&quot;)
+read_delim(&quot;a;b\n1;3&quot;, delim=&quot;;&quot;) </code></pre>
+</div>
+<div id="exercises-1" class="section level1">
+<h1>11.3.5 Exercises</h1>
+<ol style="list-style-type: decimal">
+<li>What are the most important arguments to locale()?</li>
+</ol>
+<pre class="r"><code>?locale</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>What happens if you try and set decimal_mark and grouping_mark to the same character? What happens to the default value of grouping_mark when you set decimal_mark to “,”? What happens to the default value of decimal_mark when you set the grouping_mark to “.”?</p>
+<p>parse_double(“1,23”, locale = locale(decimal_mark = “,”, grouping_mark = “,”)) # Error: <code>decimal_mark</code> and <code>grouping_mark</code> must be different</p>
+<p># If the decimal_mark is set to the comma “,”, then the grouping mark is set to the period “.”: # If the grouping mark is set to a period, then the decimal mark is set to a comma</p></li>
+<li><p>I didn’t discuss the date_format and time_format options to locale(). What do they do? Construct an example that shows when they might be useful.</p></li>
+</ol>
+<pre class="r"><code># copied 
+parse_date(&quot;1 janvier 2015&quot;, &quot;%d %B %Y&quot;, locale = locale(&quot;fr&quot;))</code></pre>
+<pre><code>## [1] &quot;2015-01-01&quot;</code></pre>
+<pre class="r"><code>#&gt; [1] &quot;2015-01-01&quot;
+parse_date(&quot;14 oct. 1979&quot;, &quot;%d %b %Y&quot;, locale = locale(&quot;fr&quot;))</code></pre>
+<pre><code>## [1] &quot;1979-10-14&quot;</code></pre>
+<pre class="r"><code>#&gt; [1] &quot;1979-10-14&quot;
+# Apparently the time format is not used for anything, date format is used for guessing column types. </code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>If you live outside the US, create a new locale object that encapsulates the settings for the types of file you read most commonly.</li>
+</ol>
+<pre class="r"><code>locale()</code></pre>
+<pre><code>## &lt;locale&gt;
+## Numbers:  123,456.78
+## Formats:  %AD / %AT
+## Timezone: UTC
+## Encoding: UTF-8
+## &lt;date_names&gt;
+## Days:   Sunday (Sun), Monday (Mon), Tuesday (Tue), Wednesday (Wed),
+##         Thursday (Thu), Friday (Fri), Saturday (Sat)
+## Months: January (Jan), February (Feb), March (Mar), April (Apr), May
+##         (May), June (Jun), July (Jul), August (Aug), September
+##         (Sep), October (Oct), November (Nov), December (Dec)
+## AM/PM:  AM/PM</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li><p>What’s the difference between read_csv() and read_csv2()?</p>
+<p>The delimiter. The function read_csv uses a comma, while read_csv2 uses a semi-colon (;). Using a semi-colon is useful when commas are used as the decimal point (as in Europe).</p></li>
+<li><p>What are the most common encodings used in Europe? What are the most common encodings used in Asia? Do some googling to find out.</p>
+<p>[<a href="https://jrnold.github.io/e4qf/data-import.html" class="uri">https://jrnold.github.io/e4qf/data-import.html</a>]</p></li>
+<li><p>Generate the correct format string to parse each of the following dates and times:</p></li>
+</ol>
+<pre class="r"><code>d1 &lt;- &quot;January 1, 2010&quot;
+d2 &lt;- &quot;2015-Mar-07&quot;
+d3 &lt;- &quot;06-Jun-2017&quot;
+d4 &lt;- c(&quot;August 19 (2015)&quot;, &quot;July 1 (2015)&quot;)
+d5 &lt;- &quot;12/30/14&quot; # Dec 30, 2014
+t1 &lt;- &quot;1705&quot;
+t2 &lt;- &quot;11:15:10.12 PM&quot;</code></pre>
 </div>
 
 
