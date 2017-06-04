@@ -739,5 +739,43 @@ df[,1]
 # 10.4 interacting with older code 
 ```
 
+# 06-07-2017 
+```{r}
+# data import 
+library(tidyverse)
+?read_fwf
+fwf_sample <- readr_example("fwf-sample.txt")
+fwf_sample
+cat(read_lines(fwf_sample))
+?read_log
+
+read_csv("a,b,c
+1,2,3
+4,5,6")
+
+read_csv("The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3", skip = 2) # skip might be useful in my analysis 
+
+read_csv("The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3")
+
+read_csv("# A comment I want to skip
+  x,y,z
+  1,2,3", comment = "#")
+
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+
+read_csv("a,b,c\n1,2,.", na = ".")
+
+
+
+
+
+
+```
 
 

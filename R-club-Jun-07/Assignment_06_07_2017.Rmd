@@ -1,0 +1,79 @@
+---
+title: "Assignment_06_07_2017"
+author: "Ruijuan Li"
+date: "6/3/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+# 11.2.2 Exercises
+
+```{r, results='hide', warning=FALSE}
+library(tidyverse)
+```
+
+1. What function would you use to read a file where fields were separated with
+“|”?
+
+      read_delim(file, delim = "|")
+
+
+2. Apart from file, skip, and comment, what other arguments do read_csv() and read_tsv() have in common?
+
+      read_csv(file, col_names = TRUE, col_types = NULL,
+  locale = default_locale(), na = c("", "NA"), quoted_na = TRUE,
+  quote = "\"", comment = "", trim_ws = TRUE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max), progress = show_progress())
+
+      read_tsv(file, col_names = TRUE, col_types = NULL,
+  locale = default_locale(), na = c("", "NA"), quoted_na = TRUE,
+  quote = "\"", comment = "", trim_ws = TRUE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max), progress = show_progress())
+  
+      delim; col_names; na; trim_ws, etc. 
+
+3. What are the most important arguments to read_fwf()?
+
+      read_fwf(file, col_positions, col_types = NULL, locale = default_locale(),
+  na = c("", "NA"), comment = "", skip = 0, n_max = Inf,
+  guess_max = min(n_max, 1000), progress = show_progress())
+
+      col_positions; widths; start, end...
+      
+```{r}
+fwf_sample <- readr_example("fwf-sample.txt")
+cat(read_lines(fwf_sample))
+
+# You can specify column positions in several ways:
+# 1. Guess based on position of empty columns
+read_fwf(fwf_sample, fwf_empty(fwf_sample, col_names = c("first", "last", "state", "ssn")))
+# 2. A vector of field widths
+read_fwf(fwf_sample, fwf_widths(c(20, 10, 12), c("name", "state", "ssn")))
+# 3. Paired vectors of start and end positions
+read_fwf(fwf_sample, fwf_positions(c(1, 30), c(10, 42), c("name", "ssn")))
+# 4. Named arguments with start and end positions
+read_fwf(fwf_sample, fwf_cols(name = c(1, 10), ssn = c(30, 42)))
+# 5. Named arguments with column widths
+read_fwf(fwf_sample, fwf_cols(name = 20, state = 10, ssn = 12))
+# don't know how this can be useful for my analysis for this moment 
+```
+
+4. Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like " or '. By convention, read_csv() assumes that the quoting character will be ", and if you want to change it you’ll need to use read_delim() instead. What arguments do you need to specify to read the following text into a data frame?
+
+```{r, results='hide'}
+"x,y\n1,'a,b'"
+
+x <- "x,y\n1,'a,b'"
+read_delim(x, ",", quote = "'")
+```
+
+5. Identify what is wrong with each of the following inline CSV files. What happens when you run the code?
+
+```{r, results='hide', warning=FALSE}
+read_csv("a,b\n1,2,3\n4,5,6")
+read_csv("a,b,c\n1,2\n1,2,3,4")
+read_csv("a,b\n\"1")
+read_csv("a,b\n1,2\na,b")
+read_csv("a;b\n1;3")
+```
