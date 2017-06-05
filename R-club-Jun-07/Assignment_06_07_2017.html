@@ -282,13 +282,28 @@ parse_date(&quot;14 oct. 1979&quot;, &quot;%d %b %Y&quot;, locale = locale(&quot
 <p>[<a href="https://jrnold.github.io/e4qf/data-import.html" class="uri">https://jrnold.github.io/e4qf/data-import.html</a>]</p></li>
 <li><p>Generate the correct format string to parse each of the following dates and times:</p></li>
 </ol>
-<pre class="r"><code>d1 &lt;- &quot;January 1, 2010&quot;
+<pre class="r"><code>?parse_date
+d1 &lt;- &quot;January 1, 2010&quot;
 d2 &lt;- &quot;2015-Mar-07&quot;
 d3 &lt;- &quot;06-Jun-2017&quot;
 d4 &lt;- c(&quot;August 19 (2015)&quot;, &quot;July 1 (2015)&quot;)
 d5 &lt;- &quot;12/30/14&quot; # Dec 30, 2014
 t1 &lt;- &quot;1705&quot;
 t2 &lt;- &quot;11:15:10.12 PM&quot;</code></pre>
+<pre class="r"><code>parse_date(d1, format = &quot;%B %d, %Y&quot;)</code></pre>
+<pre><code>## [1] &quot;2010-01-01&quot;</code></pre>
+<pre class="r"><code>parse_date(d2, format = &quot;%Y-%b-%d&quot;)</code></pre>
+<pre><code>## [1] &quot;2015-03-07&quot;</code></pre>
+<pre class="r"><code>parse_date(d3, format = &quot;%d-%b-%Y&quot;)</code></pre>
+<pre><code>## [1] &quot;2017-06-06&quot;</code></pre>
+<pre class="r"><code>parse_date(d4, format = &quot;%B %d (%Y)&quot;)</code></pre>
+<pre><code>## [1] &quot;2015-08-19&quot; &quot;2015-07-01&quot;</code></pre>
+<pre class="r"><code>parse_date(d5, format = &quot;%m/%d/%y&quot;)</code></pre>
+<pre><code>## [1] &quot;2014-12-30&quot;</code></pre>
+<pre class="r"><code>parse_time(t1, format = &quot;%H%M&quot;) </code></pre>
+<pre><code>## 17:05:00</code></pre>
+<pre class="r"><code>parse_time(t2, format = &quot;%I:%M:%OS %p&quot;) </code></pre>
+<pre><code>## 23:15:10.12</code></pre>
 </div>
 
 
