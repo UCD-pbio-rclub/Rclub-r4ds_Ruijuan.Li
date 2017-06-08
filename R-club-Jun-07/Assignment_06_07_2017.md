@@ -182,6 +182,7 @@ read_fwf(fwf_sample, fwf_cols(name = 20, state = 10, ssn = 12))
 
 ```r
 # don't know how this can be useful for my analysis for this moment 
+# can be useful for barcoding??? RNA-seq? fixed width... 
 ```
 
 4. Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like " or '. By convention, read_csv() assumes that the quoting character will be ", and if you want to change it you’ll need to use read_delim() instead. What arguments do you need to specify to read the following text into a data frame?
@@ -192,6 +193,7 @@ read_fwf(fwf_sample, fwf_cols(name = 20, state = 10, ssn = 12))
 
 x <- "x,y\n1,'a,b'"
 read_delim(x, ",", quote = "'")
+read_csv(x, quote = "'") # this also works 
 ```
 
 5. Identify what is wrong with each of the following inline CSV files. What happens when you run the code?
@@ -253,22 +255,17 @@ parse_date("14 oct. 1979", "%d %b %Y", locale = locale("fr"))
 4. If you live outside the US, create a new locale object that encapsulates the settings for the types of file you read most commonly.
 
 ```r
-locale()
+date_names_lang("zh") 
 ```
 
 ```
-## <locale>
-## Numbers:  123,456.78
-## Formats:  %AD / %AT
-## Timezone: UTC
-## Encoding: UTF-8
 ## <date_names>
-## Days:   Sunday (Sun), Monday (Mon), Tuesday (Tue), Wednesday (Wed),
-##         Thursday (Thu), Friday (Fri), Saturday (Sat)
-## Months: January (Jan), February (Feb), March (Mar), April (Apr), May
-##         (May), June (Jun), July (Jul), August (Aug), September
-##         (Sep), October (Oct), November (Nov), December (Dec)
-## AM/PM:  AM/PM
+## Days:   星期日 (周日), 星期一 (周一), 星期二 (周二), 星期三 (周三), 星期四
+##         (周四), 星期五 (周五), 星期六 (周六)
+## Months: 一月 (1月), 二月 (2月), 三月 (3月), 四月 (4月), 五月 (5月), 六月
+##         (6月), 七月 (7月), 八月 (8月), 九月 (9月), 十月 (10月),
+##         十一月 (11月), 十二月 (12月)
+## AM/PM:  上午/下午
 ```
 
 5. What’s the difference between read_csv() and read_csv2()?

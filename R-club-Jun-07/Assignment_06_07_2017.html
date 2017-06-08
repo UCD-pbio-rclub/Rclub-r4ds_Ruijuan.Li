@@ -219,14 +219,16 @@ read_fwf(fwf_sample, fwf_cols(name = 20, state = 10, ssn = 12))</code></pre>
 ## 1    John Smith    WA 418-Y11-4111
 ## 2 Mary Hartford    CA 319-Z19-4341
 ## 3    Evan Nolan    IL 219-532-c301</code></pre>
-<pre class="r"><code># don't know how this can be useful for my analysis for this moment </code></pre>
+<pre class="r"><code># don't know how this can be useful for my analysis for this moment 
+# can be useful for barcoding??? RNA-seq? fixed width... </code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like &quot; or ’. By convention, read_csv() assumes that the quoting character will be “, and if you want to change it you’ll need to use read_delim() instead. What arguments do you need to specify to read the following text into a data frame?</li>
 </ol>
 <pre class="r"><code>&quot;x,y\n1,'a,b'&quot;
 
 x &lt;- &quot;x,y\n1,'a,b'&quot;
-read_delim(x, &quot;,&quot;, quote = &quot;'&quot;)</code></pre>
+read_delim(x, &quot;,&quot;, quote = &quot;'&quot;)
+read_csv(x, quote = &quot;'&quot;) # this also works </code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Identify what is wrong with each of the following inline CSV files. What happens when you run the code?</li>
 </ol>
@@ -263,19 +265,14 @@ parse_date(&quot;14 oct. 1979&quot;, &quot;%d %b %Y&quot;, locale = locale(&quot
 <ol start="4" style="list-style-type: decimal">
 <li>If you live outside the US, create a new locale object that encapsulates the settings for the types of file you read most commonly.</li>
 </ol>
-<pre class="r"><code>locale()</code></pre>
-<pre><code>## &lt;locale&gt;
-## Numbers:  123,456.78
-## Formats:  %AD / %AT
-## Timezone: UTC
-## Encoding: UTF-8
-## &lt;date_names&gt;
-## Days:   Sunday (Sun), Monday (Mon), Tuesday (Tue), Wednesday (Wed),
-##         Thursday (Thu), Friday (Fri), Saturday (Sat)
-## Months: January (Jan), February (Feb), March (Mar), April (Apr), May
-##         (May), June (Jun), July (Jul), August (Aug), September
-##         (Sep), October (Oct), November (Nov), December (Dec)
-## AM/PM:  AM/PM</code></pre>
+<pre class="r"><code>date_names_lang(&quot;zh&quot;) </code></pre>
+<pre><code>## &lt;date_names&gt;
+## Days:   星期日 (周日), 星期一 (周一), 星期二 (周二), 星期三 (周三), 星期四
+##         (周四), 星期五 (周五), 星期六 (周六)
+## Months: 一月 (1月), 二月 (2月), 三月 (3月), 四月 (4月), 五月 (5月), 六月
+##         (6月), 七月 (7月), 八月 (8月), 九月 (9月), 十月 (10月),
+##         十一月 (11月), 十二月 (12月)
+## AM/PM:  上午/下午</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li><p>What’s the difference between read_csv() and read_csv2()?</p>
 <p>The delimiter. The function read_csv uses a comma, while read_csv2 uses a semi-colon (;). Using a semi-colon is useful when commas are used as the decimal point (as in Europe).</p></li>
