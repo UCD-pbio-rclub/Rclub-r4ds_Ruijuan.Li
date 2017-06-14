@@ -848,7 +848,12 @@ parse_date("01/02/15", "%y/%m/%d")
 #> [1] "2001-02-15"
 
 # Other Types of Data
-# many useful packages to extract information from different type of data 
+# many useful packages to extract information from different type of data  
+```
+
+# 06-14-2017 
+```{r}
+
 
 
 ```

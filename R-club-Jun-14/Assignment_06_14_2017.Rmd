@@ -1,0 +1,208 @@
+---
+title: "Assignment_06_14_2017"
+author: "Ruijuan Li"
+date: "6/14/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+# 12.2.1 Exercises
+
+1. Using prose, describe how the variables and observations are organised in each of the sample tables.
+```{r}
+# skipped 
+```
+
+2. Compute the rate for table2, and table4a + table4b. You will need to perform four operations:
+
+      1. Extract the number of TB cases per country per year.
+
+      2. Extract the matching population per country per year.
+  
+      3. Divide cases by population, and multiply by 10000.
+
+      4. Store back in the appropriate place.
+
+    Which representation is easiest to work with? Which is hardest? Why?
+    
+```{r, warning=FALSE}
+library("tidyverse")
+library("reshape2")
+
+# table 2 
+cases <- 
+table2 %>%
+  filter(type == "cases") %>%
+  select(count)
+
+population <- 
+table2 %>%
+  filter(type == "population") %>%
+  select(count)
+
+country <- filter(table2, type == "cases")[["country"]]
+year <- filter(table2, type == "cases")[["year"]]
+
+table2_clean <- tibble(country = country,
+       year = year,
+       cases2 = cases$count,
+       population2 = population$count,
+       rate = cases$count / population$count * 1000)
+table2_clean
+
+# table4a; table4b
+table4a.melt <- melt(table4a) # cases value 
+table4b.melt <- melt(table4b) # population value 
+table4ab <- 
+merge(table4a.melt, table4b.melt, by="country") %>%
+  select(country, variable.x, value.x, value.y) %>%
+  mutate(value.x / value.y * 10000)
+colnames(table4ab) <- c("country", "year", "cases", "population", "rate")
+head(table4ab)
+```
+
+3. Recreate the plot showing change in cases over time using table2 instead of table1. What do you need to do first?
+```{r}
+library(ggplot2)
+ggplot(table1, aes(year, cases)) + 
+  geom_line(aes(group = country), colour = "grey50") + 
+  geom_point(aes(colour = country))
+
+ggplot(table2_clean, aes(year, cases2)) + 
+  geom_line(aes(group = country), colour = "grey50") + 
+  geom_point(aes(colour = country))
+```
+
+# 12.3.3 Exercises
+
+1. Why are gather() and spread() not perfectly symmetrical?
+      Carefully consider the following example:
+
+```{r}
+stocks <- tibble(
+  year   = c(2015, 2015, 2016, 2016),
+  half  = c(   1,    2,     1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
+stocks
+stocks %>% 
+  spread(year, return) %>% 
+  gather("year", "return", `2015`:`2016`) 
+```
+
+      (Hint: look at the variable types and think about column names.)
+
+      Both spread() and gather() have a convert argument. What does it do?
+
+The functions spread and gather are not perfectly symmetrical because column type information is not transferred between them. In the original table the column year was numeric, but after the spread-gather cyle it is character, because with gather, variable names are always converted to a character vector. (copied from https://jrnold.github.io/e4qf/tidy-data.html) 
+
+2. Why does this code fail?
+
+```{r, warning=FALSE}
+# table4a %>% 
+#  gather(1999, 2000, key = "year", value = "cases")
+#> Error in combine_vars(vars, ind_list): Position must be between 0 and n
+
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+
+3. Why does spreading this tibble fail? How could you add a new column to fix the problem? 
+
+```{r, warning=FALSE}
+# people <- tribble(
+#   ~name,             ~key,    ~value,
+#   #-----------------|--------|------
+#   "Phillip Woods",   "age",       45,
+#   "Phillip Woods",   "height",   186,
+#   "Phillip Woods",   "age",       50,
+#   "Jessica Cordero", "age",       37,
+#   "Jessica Cordero", "height",   156
+# )
+
+# spread(people, key, value)
+#> Error: Duplicate identifiers for rows (1, 3) 
+
+people <- tribble(
+  ~name,             ~key,    ~value, ~obs,
+  #-----------------|--------|------|------
+  "Phillip Woods",   "age",       45, 1,
+  "Phillip Woods",   "height",   186, 1,
+  "Phillip Woods",   "age",       50, 2,
+  "Jessica Cordero", "age",       37, 1,
+  "Jessica Cordero", "height",   156, 1
+)
+
+spread(people, key, value)
+```
+
+4. Tidy the simple tibble below. Do you need to spread or gather it? What are the variables?
+
+```{r}
+preg <- tribble(
+  ~pregnant, ~male, ~female,
+  "yes",     NA,    10,
+  "no",      20,    12
+)
+
+preg
+
+gather(preg, sex, count, male, female) 
+``` 
+
+# 12.4.3 Exercises
+
+1. What do the extra and fill arguments do in separate()? Experiment with the various options for the following two toy datasets.
+
+```{r, warning=FALSE}
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one", "two", "three"))
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"))
+
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one", "two", "three"), extra="drop")
+
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one", "two", "three"), extra="merge")
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"), fill="right")
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"), fill="left")
+```
+
+2. Both unite() and separate() have a remove argument. What does it do? Why would you set it to FALSE?
+```{r}
+?unite
+
+mtcars %>%
+  unite(vs_am, vs, am) %>%
+  separate(vs_am, c("vs", "am"), remove=T) %>% # remove vs_am 
+  colnames
+
+mtcars %>%
+  unite(vs_am, vs, am) %>%
+  separate(vs_am, c("vs", "am"), remove=F) %>% # don't remove vs_am 
+  colnames
+```
+
+Compare and contrast separate() and extract(). Why are there three variations of separation (by position, by separator, and with groups), but only one unite?
+```{r}
+?extract
+df <- data.frame(x = c(NA, "a-b", "a-d", "b-c", "d-e"))
+df
+df %>% extract(x, "A")
+df %>% extract(x, c("A", "B"), "([[:alnum:]]+)-([[:alnum:]]+)")
+df %>% extract(x, c("A", "B"), "([a-d]+)-([a-d]+)")
+```
+
+In unite it is unambigous since it is many columns to one, and once the columns are specified, there is only one way to do it, the only choice is the sep. In separate, it is one to many, and there are multiple ways to split the character string.
+
+
+
+
+
