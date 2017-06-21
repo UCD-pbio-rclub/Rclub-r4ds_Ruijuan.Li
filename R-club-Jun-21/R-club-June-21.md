@@ -343,20 +343,10 @@ p.by.year
 
 ```r
 p.by.sex <- ggplot(data = sex_cases, mapping = aes(x=sex, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 15), legend.position = "none") + labs(list(title = "by sex", x = "", y = "number of cases"))
-p.by.sex
+p.by.sex 
 ```
 
 ![](R-club-June-21_files/figure-html/unnamed-chunk-6-3.png)<!-- -->
-
-```r
-# library(cowplot)
-# p.all <- plot_grid(
-#   p.by.country +labs(title="by country")+theme(legend.position = "none"),
-#   p.by.year +labs(title="by year") +theme(legend.position = "none"),
-#   p.by.sex +labs(title="by sex") +theme(legend.position = "none"),
-#   align = 'vh', ncol=1, nrow = 3, labels=c("",""))
-# p.all
-```
 
 # 13.2.1 Exercises
 
