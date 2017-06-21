@@ -125,7 +125,9 @@ $(document).ready(function () {
 
 <div id="exercises" class="section level1">
 <h1>12.5.1 Exercises</h1>
-<pre><code>  1. Compare and contrast the fill arguments to spread() and complete().</code></pre>
+<ol style="list-style-type: decimal">
+<li>Compare and contrast the fill arguments to spread() and complete().</li>
+</ol>
 <pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
 <pre><code>## Loading tidyverse: ggplot2
 ## Loading tidyverse: tibble
@@ -184,7 +186,9 @@ stocks %&gt;%
 ## 7  2016     3   0.17
 ## 8  2016     4   2.66</code></pre>
 <pre class="r"><code># fill: A named list that for each variable supplies a single value to use instead of NA for missing combinations.</code></pre>
-<pre><code>  2. What does the direction argument to fill() do?</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>What does the direction argument to fill() do?</li>
+</ol>
 <pre class="r"><code>?fill</code></pre>
 <pre><code>## Help on topic 'fill' was found in the following packages:
 ## 
@@ -240,7 +244,9 @@ df</code></pre>
 </div>
 <div id="exercises-1" class="section level1">
 <h1>12.6.1 Exercises</h1>
-<pre><code>  1. In this case study I set na.rm = TRUE just to make it easier to check that we had the correct values. Is this reasonable? Think about how missing values are represented in this dataset. Are there implicit missing values? What’s the difference between an NA and zero?</code></pre>
+<ol style="list-style-type: decimal">
+<li>In this case study I set na.rm = TRUE just to make it easier to check that we had the correct values. Is this reasonable? Think about how missing values are represented in this dataset. Are there implicit missing values? What’s the difference between an NA and zero?</li>
+</ol>
 <pre class="r"><code># in case study 
 who1 &lt;- who %&gt;% 
   gather(new_sp_m014:newrel_f65, key = &quot;key&quot;, value = &quot;cases&quot;, na.rm = TRUE)
@@ -268,7 +274,9 @@ head(who1.1)</code></pre>
 <pre class="r"><code># YES, there are implicit missing values 
 
 # missing vlaues means from specific country, year, and case(combined by case type, sex &amp; age group), there is no data available. Zero mean the data value is zero. The data is what?  </code></pre>
-<pre><code>  2. What happens if you neglect the mutate() step? (mutate(key = stringr::str_replace(key, &quot;newrel&quot;, &quot;new_rel&quot;))) </code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>What happens if you neglect the mutate() step? (mutate(key = stringr::str_replace(key, “newrel”, “new_rel”)))</li>
+</ol>
 <pre class="r"><code># in case study 
 # 1) collapse values into variables  
 # 2) explore the data &amp; understand the data structure
@@ -306,7 +314,9 @@ who5 &lt;- who4 %&gt;%
 
 # Warning message:
 # Too few values at 2580 locations: 73467, 73468, 73469, 73470, 73471, 73472, 73473, 73474, 73475, 73476, 73477, 73478, 73479, 73480, 73481, 73482, 73483, 73484, 73485, 73486, ...  </code></pre>
-<pre><code>  3. I claimed that iso2 and iso3 were redundant with country. Confirm this claim. </code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>I claimed that iso2 and iso3 were redundant with country. Confirm this claim.</li>
+</ol>
 <pre class="r"><code>who1.1 %&gt;% 
   complete(country, year, key) %&gt;%
   dim()</code></pre>
@@ -319,7 +329,9 @@ who5 &lt;- who4 %&gt;%
   complete(iso3, year, key) %&gt;%
   dim() </code></pre>
 <pre><code>## [1] 416976      6</code></pre>
-<pre><code>  4. For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.</li>
+</ol>
 <pre class="r"><code>country_cases &lt;- 
   who5 %&gt;%
   count(country, wt=cases)
@@ -359,10 +371,14 @@ library(cowplot)</code></pre>
 </div>
 <div id="exercises-2" class="section level1">
 <h1>13.2.1 Exercises</h1>
-<pre><code>  1. Imagine you wanted to draw (approximately) the route each plane flies from its origin to its destination. What variables would you need? What tables would you need to combine?</code></pre>
+<ol style="list-style-type: decimal">
+<li>Imagine you wanted to draw (approximately) the route each plane flies from its origin to its destination. What variables would you need? What tables would you need to combine?</li>
+</ol>
 <pre class="r"><code># flights$origin &amp; flights$dest
 # flights &amp; airport  </code></pre>
-<pre><code>  2. I forgot to draw the relationship between weather and airports. What is the relationship and how should it appear in the diagram?</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>I forgot to draw the relationship between weather and airports. What is the relationship and how should it appear in the diagram?</li>
+</ol>
 <pre class="r"><code>library(nycflights13)</code></pre>
 <pre><code>## Warning: package 'nycflights13' was built under R version 3.2.5</code></pre>
 <pre class="r"><code>colnames(weather)</code></pre>
@@ -378,7 +394,9 @@ library(cowplot)</code></pre>
 ## [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      
 ## [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;</code></pre>
 <pre class="r"><code># origin is the common column for weather &amp; airport </code></pre>
-<pre><code>  3. weather only contains information for the origin (NYC) airports. If it contained weather records for all airports in the USA, what additional relation would it define with flights?</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>weather only contains information for the origin (NYC) airports. If it contained weather records for all airports in the USA, what additional relation would it define with flights?</li>
+</ol>
 <pre class="r"><code>colnames(flights)</code></pre>
 <pre><code>##  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      
 ##  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;
@@ -386,7 +404,9 @@ library(cowplot)</code></pre>
 ## [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      
 ## [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;</code></pre>
 <pre class="r"><code># dest?  </code></pre>
-<pre><code>  4. We know that some days of the year are “special”, and fewer people than usual fly on them. How might you represent that data as a data frame? What would be the primary keys of that table? How would it connect to the existing tables?</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>We know that some days of the year are “special”, and fewer people than usual fly on them. How might you represent that data as a data frame? What would be the primary keys of that table? How would it connect to the existing tables?</li>
+</ol>
 <pre class="r"><code># month &amp; day would be the primary key (concept of primary key), it connect to flights with column &quot;month&quot; &amp; &quot;day&quot; 
 # representation of that data frame eg: month day average_passenger_number_in_10_years  </code></pre>
 </div>

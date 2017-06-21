@@ -4,7 +4,7 @@ Ruijuan Li
 
 # 12.5.1 Exercises
 
-      1. Compare and contrast the fill arguments to spread() and complete().
+1. Compare and contrast the fill arguments to spread() and complete().
 
 ```r
 library("tidyverse")
@@ -97,7 +97,7 @@ stocks %>%
 # fill: A named list that for each variable supplies a single value to use instead of NA for missing combinations.
 ```
 
-      2. What does the direction argument to fill() do?
+2. What does the direction argument to fill() do?
 
 ```r
 ?fill
@@ -177,7 +177,7 @@ df %>% fill(Year, .direction="down") # fill from the present to its downward
 
 # 12.6.1 Exercises
 
-      1. In this case study I set na.rm = TRUE just to make it easier to check that we had the correct values. Is this reasonable? Think about how missing values are represented in this dataset. Are there implicit missing values? What’s the difference between an NA and zero?
+1. In this case study I set na.rm = TRUE just to make it easier to check that we had the correct values. Is this reasonable? Think about how missing values are represented in this dataset. Are there implicit missing values? What’s the difference between an NA and zero?
 
 ```r
 # in case study 
@@ -233,7 +233,7 @@ who1.1 %>%
 # missing vlaues means from specific country, year, and case(combined by case type, sex & age group), there is no data available. Zero mean the data value is zero. The data is what?  
 ```
 
-      2. What happens if you neglect the mutate() step? (mutate(key = stringr::str_replace(key, "newrel", "new_rel"))) 
+2. What happens if you neglect the mutate() step? (mutate(key = stringr::str_replace(key, "newrel", "new_rel"))) 
 
 ```r
 # in case study 
@@ -281,7 +281,7 @@ who5 <- who4 %>%
 # Too few values at 2580 locations: 73467, 73468, 73469, 73470, 73471, 73472, 73473, 73474, 73475, 73476, 73477, 73478, 73479, 73480, 73481, 73482, 73483, 73484, 73485, 73486, ...  
 ```
 
-      3. I claimed that iso2 and iso3 were redundant with country. Confirm this claim. 
+3. I claimed that iso2 and iso3 were redundant with country. Confirm this claim. 
 
 ```r
 who1.1 %>% 
@@ -313,7 +313,7 @@ who1.1 %>%
 ## [1] 416976      6
 ```
 
-      4. For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.
+4. For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.
 
 ```r
 country_cases <- 
@@ -378,14 +378,14 @@ p.all
 
 # 13.2.1 Exercises
 
-      1. Imagine you wanted to draw (approximately) the route each plane flies from its origin to its destination. What variables would you need? What tables would you need to combine?
+1. Imagine you wanted to draw (approximately) the route each plane flies from its origin to its destination. What variables would you need? What tables would you need to combine?
 
 ```r
 # flights$origin & flights$dest
 # flights & airport  
 ```
 
-      2. I forgot to draw the relationship between weather and airports. What is the relationship and how should it appear in the diagram?
+2. I forgot to draw the relationship between weather and airports. What is the relationship and how should it appear in the diagram?
 
 ```r
 library(nycflights13)
@@ -429,7 +429,7 @@ colnames(flights)
 # origin is the common column for weather & airport 
 ```
 
-      3. weather only contains information for the origin (NYC) airports. If it contained weather records for all airports in the USA, what additional relation would it define with flights?
+3. weather only contains information for the origin (NYC) airports. If it contained weather records for all airports in the USA, what additional relation would it define with flights?
 
 ```r
 colnames(flights)
@@ -447,7 +447,7 @@ colnames(flights)
 # dest?  
 ```
 
-      4. We know that some days of the year are “special”, and fewer people than usual fly on them. How might you represent that data as a data frame? What would be the primary keys of that table? How would it connect to the existing tables?
+4. We know that some days of the year are “special”, and fewer people than usual fly on them. How might you represent that data as a data frame? What would be the primary keys of that table? How would it connect to the existing tables?
 
 ```r
 # month & day would be the primary key (concept of primary key), it connect to flights with column "month" & "day" 
