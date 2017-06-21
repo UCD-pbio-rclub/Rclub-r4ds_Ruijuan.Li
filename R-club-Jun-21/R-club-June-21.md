@@ -328,53 +328,35 @@ sex_cases <-
   who5 %>%
   count(sex, wt=cases)
 
-p.by.country <- ggplot(data = country_cases, mapping = aes(x=country, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 3), legend.position = "none") + labs(list(title = "", x = "", y = "number of cases"))
-
-p.by.year <- ggplot(data = year_cases, mapping = aes(x=year, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 6), legend.position = "none") + labs(list(title = "", x = "", y = "number of cases"))
-
-p.by.sex <- ggplot(data = sex_cases, mapping = aes(x=sex, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 15), legend.position = "none") + labs(list(title = "", x = "", y = "number of cases"))
-
-library(cowplot)
-```
-
-```
-## Warning: package 'cowplot' was built under R version 3.2.5
-```
-
-```
-## Warning: `legend.margin` must be specified using `margin()`. For the old
-## behavior use legend.spacing
-```
-
-```
-## 
-## Attaching package: 'cowplot'
-```
-
-```
-## The following object is masked from 'package:ggplot2':
-## 
-##     ggsave
-```
-
-```r
-p.all <- plot_grid(
-  p.by.country +labs(title="by country")+theme(legend.position = "none"),
-  p.by.year +labs(title="by year") +theme(legend.position = "none"),
-  p.by.sex +labs(title="by sex") +theme(legend.position = "none"),
-  align = 'vh', ncol=1, nrow = 3, labels=c("",""))
-```
-
-```
-## Warning: `panel.margin` is deprecated. Please use `panel.spacing` property
-## instead
-```
-
-```r
-p.all
+p.by.country <- ggplot(data = country_cases, mapping = aes(x=country, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 3), legend.position = "none") + labs(list(title = "by country", x = "", y = "number of cases"))
+p.by.country
 ```
 
 ![](R-club-June-21_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+```r
+p.by.year <- ggplot(data = year_cases, mapping = aes(x=year, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 6), legend.position = "none") + labs(list(title = "by year", x = "", y = "number of cases"))
+p.by.year
+```
+
+![](R-club-June-21_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
+
+```r
+p.by.sex <- ggplot(data = sex_cases, mapping = aes(x=sex, y=n)) + geom_col() + theme(axis.text.x = element_text(angle = 90, size = 15), legend.position = "none") + labs(list(title = "by sex", x = "", y = "number of cases"))
+p.by.sex
+```
+
+![](R-club-June-21_files/figure-html/unnamed-chunk-6-3.png)<!-- -->
+
+```r
+# library(cowplot)
+# p.all <- plot_grid(
+#   p.by.country +labs(title="by country")+theme(legend.position = "none"),
+#   p.by.year +labs(title="by year") +theme(legend.position = "none"),
+#   p.by.sex +labs(title="by sex") +theme(legend.position = "none"),
+#   align = 'vh', ncol=1, nrow = 3, labels=c("",""))
+# p.all
+```
 
 # 13.2.1 Exercises
 
