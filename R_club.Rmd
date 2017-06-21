@@ -851,8 +851,94 @@ parse_date("01/02/15", "%y/%m/%d")
 # many useful packages to extract information from different type of data  
 ```
 
-# 06-14-2017 
+# 06-21-2017 
 ```{r}
+# missing data explicit or implicit 
+library(tidyverse)
+stocks <- tibble(
+  year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qtr    = c(   1,    2,    3,    4,    2,    3,    4),
+  return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+
+stocks %>% 
+  spread(key = year, value = return) %>% 
+  gather(key = year, value = rerun, `2015`, `2016`, na.rm=T)
+
+stocks %>% 
+  complete(year, qtr) 
+# complete() takes a set of columns, and finds all unique combinations. It then ensures the original dataset contains all those values, filling in explicit NAs where necessary. 
+
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+
+treatment %>% 
+  fill(person) # this can be quite useful !!! 
+
+# case study 
+who
+
+# 1) collapse values into variables 
+who1 <- who %>% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE)
+who1
+
+# 2) explore the data & understand the data structure
+who1 %>% 
+  count(key)
+
+who1 %>% 
+  count(key, wt = cases)
+
+# 3) make consistent value names 
+who2 <- who1 %>% 
+  mutate(key = stringr::str_replace(key, "newrel", "new_rel"))
+who2
+
+# 4) seperate key to different variables 
+who3 <- who2 %>% 
+  separate(key, c("new", "type", "sexage"), sep = "_")
+who3 
+
+# 5) explore & drop repeated & constant variables 
+who3 %>% 
+  count(new) 
+
+who4 <- who3 %>% 
+  select(-new, -iso2, -iso3)
+
+# 6) seprate sex & age into different variables 
+who5 <- who4 %>% 
+  separate(sexage, c("sex", "age"), sep = 1)
+who5
+
+# tidy data!!! 
+
+# piece the above tidying code together in a pipe 
+who %>%
+  gather(code, value, new_sp_m014:newrel_f65, na.rm = TRUE) %>% 
+  mutate(code = stringr::str_replace(code, "newrel", "new_rel")) %>%
+  separate(code, c("new", "var", "sexage")) %>% 
+  select(-new, -iso2, -iso3) %>% 
+  separate(sexage, c("sex", "age"), sep = 1) 
+
+# mutating joins 
+# filtering joins
+# set operations 
+
+library(tidyverse)
+library(nycflights13)
+
+# nycflights13 contains four tibbles that are related to the flights table
+airlines
+airports
+planes
+weather
 
 
 

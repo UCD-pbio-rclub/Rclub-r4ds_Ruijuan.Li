@@ -121,7 +121,7 @@ table4a %>%
 #   "Jessica Cordero", "height",   156
 # )
 
-# spread(people, key, value)
+# spread(people, key, value) 
 #> Error: Duplicate identifiers for rows (1, 3) 
 
 people <- tribble(
@@ -200,8 +200,7 @@ df %>% extract(x, c("A", "B"), "([[:alnum:]]+)-([[:alnum:]]+)")
 df %>% extract(x, c("A", "B"), "([a-d]+)-([a-d]+)")
 ```
 
-In unite it is unambigous since it is many columns to one, and once the columns are specified, there is only one way to do it, the only choice is the sep. In separate, it is one to many, and there are multiple ways to split the character string.
-
+In unite it is unambigous since it is many columns to one, and once the columns are specified, there is only one way to do it, the only choice is the sep. In separate, it is one to many, and there are multiple ways to split the character string. 
 
 
 
