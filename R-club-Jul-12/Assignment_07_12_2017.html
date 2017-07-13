@@ -503,20 +503,20 @@ vec_to_str(letters) # don't really see </code></pre>
 </ol>
 <pre class="r"><code># from Julin 
 str_view(&quot;appple&quot;,&quot;(.)\\1\\1&quot;) # a tripple repeated single letter </code></pre>
-<div id="htmlwidget-18d1870c17144ee2a829" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-18d1870c17144ee2a829">{"x":{"html":"<ul>\n  <li>a<span class='match'>ppp<\/span>le<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6485ad886c19dc7e6a58" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6485ad886c19dc7e6a58">{"x":{"html":"<ul>\n  <li>a<span class='match'>ppp<\/span>le<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>str_view(&quot;abba is my favorite band&quot;, &quot;(.)(.)\\2\\1&quot;) # two different letters repeat for 1:2:2 </code></pre>
-<div id="htmlwidget-cb6b83b2c3c1904186db" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cb6b83b2c3c1904186db">{"x":{"html":"<ul>\n  <li><span class='match'>abba<\/span> is my favorite band<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8c01addb486e6d796f30" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8c01addb486e6d796f30">{"x":{"html":"<ul>\n  <li><span class='match'>abba<\/span> is my favorite band<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>str_view(&quot;abab is my favorite band&quot;, &quot;(..)\\1&quot;) # A two character string repeated , ie &quot;abab&quot;</code></pre>
-<div id="htmlwidget-8c20998c3b3dc7705a27" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8c20998c3b3dc7705a27">{"x":{"html":"<ul>\n  <li><span class='match'>abab<\/span> is my favorite band<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0c64434e00532f6bb797" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c64434e00532f6bb797">{"x":{"html":"<ul>\n  <li><span class='match'>abab<\/span> is my favorite band<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>str_view(&quot;bananas are good&quot;, &quot;(.).\\1.\\1&quot;) # A character repeated twice, but with any other characters inbetween </code></pre>
-<div id="htmlwidget-f53a563f5bdd53f8ecb6" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f53a563f5bdd53f8ecb6">{"x":{"html":"<ul>\n  <li>b<span class='match'>anana<\/span>s are good<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8301db458ea7f6a8eb73" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8301db458ea7f6a8eb73">{"x":{"html":"<ul>\n  <li>b<span class='match'>anana<\/span>s are good<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>str_view(&quot;geese from canda see many sights&quot;,&quot;(.)(.)(.).*\\3\\2\\1&quot;) # A three character palindrome separated by any number of characters in the middle </code></pre>
-<div id="htmlwidget-cd2bc8c11c3311d77f15" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cd2bc8c11c3311d77f15">{"x":{"html":"<ul>\n  <li>g<span class='match'>eese from canda see<\/span> many sights<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a8fd223749098518433e" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a8fd223749098518433e">{"x":{"html":"<ul>\n  <li>g<span class='match'>eese from canda see<\/span> many sights<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Construct regular expressions to match words that:</p>
 <ol style="list-style-type: decimal">
@@ -526,13 +526,13 @@ str_view(&quot;appple&quot;,&quot;(.)\\1\\1&quot;) # a tripple repeated single l
 </ol>
 <pre class="r"><code>pattern &lt;- &quot;[A-Za-z]*([A-Za-z]{2})[a-z]*\\1[a-z]*&quot;
 str_view_all(&quot;what silly sentence am I going to write for this exercise?&quot;,pattern)</code></pre>
-<div id="htmlwidget-bf8f306294400776c815" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bf8f306294400776c815">{"x":{"html":"<ul>\n  <li>what silly <span class='match'>sentence<\/span> am I going to write for this exercise?<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-10fbbdf59700b34e27a1" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-10fbbdf59700b34e27a1">{"x":{"html":"<ul>\n  <li>what silly <span class='match'>sentence<\/span> am I going to write for this exercise?<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <pre><code>  3. Contain one letter repeated in at least three places (e.g. “eleven” contains three “e”s.)</code></pre>
 <pre class="r"><code>pattern &lt;- &quot;[A-Za-z]*([A-Za-z])[a-z]*\\1[a-z]*\\1[a-z]*&quot;
 str_view_all(&quot;what silly sentence am I going to write for this exercise?  Aiyeee&quot;,pattern) </code></pre>
-<div id="htmlwidget-6fe9ed8f9553f825e374" style="width:960px;height:auto;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6fe9ed8f9553f825e374">{"x":{"html":"<ul>\n  <li>what silly <span class='match'>sentence<\/span> am I going to write for this <span class='match'>exercise<\/span>?  <span class='match'>Aiyeee<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-dc501030d39503cbcb70" style="width:960px;height:auto;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dc501030d39503cbcb70">{"x":{"html":"<ul>\n  <li>what silly <span class='match'>sentence<\/span> am I going to write for this <span class='match'>exercise<\/span>?  <span class='match'>Aiyeee<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 
 
