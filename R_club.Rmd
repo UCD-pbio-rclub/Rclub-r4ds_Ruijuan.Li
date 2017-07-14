@@ -941,6 +941,53 @@ planes
 weather
 ```
 
+# 06-28-2017 
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+# A primary key uniquely identifies an observation in its own table. 
+# Once you’ve identified the primary keys in your tables, it’s good practice to verify that they do indeed uniquely identify each observation. One way to do that is to count() the primary keys and look for entries where n is greater than one: 
+planes %>% 
+  count(tailnum) %>% # count is very important 
+  filter(n > 1)
+
+weather %>% 
+  count(year, month, day, hour, origin) %>% 
+  filter(n > 1)
+
+flights %>% 
+  count(year, month, day, flight) %>% 
+  filter(n > 1)
+
+flights %>% 
+  count(year, month, day, tailnum) %>% 
+  filter(n > 1)
+
+#  If a table lacks a primary key, it’s sometimes useful to add one with mutate() and row_number(). That makes it easier to match observations if you’ve done some filtering and want to check back in with the original data. This is called a surrogate key. 
+
+# Mutating joins
+flights2 <- flights %>% 
+  select(year:day, hour, origin, dest, tailnum, carrier)
+colnames(flights2)
+colnames(airlines)
+
+flights2 %>%
+  select(-origin, -dest) %>% 
+  left_join(airlines, by = "carrier") # left join 
+
+?left_join
+
+flights2 %>%
+  select(-origin, -dest) %>% 
+  mutate(name = airlines$name[match(carrier, airlines$carrier)])
+
+
+
+
+
+```
+
 # 07-12-2017 
 ```{r}
 library(tidyverse)
@@ -1015,8 +1062,7 @@ str_sort(x, locale = "en")  # English
 
 str_sort(x, locale = "haw") # Hawaiian
 #> [1] "apple"    "eggplant" "banana"
-
-
 ```
+
 
 

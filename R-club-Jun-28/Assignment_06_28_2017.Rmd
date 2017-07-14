@@ -1,0 +1,77 @@
+---
+title: "Assignment_06_28_2017"
+author: "Ruijuan Li"
+date: "7/14/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+# 13.3.1 Exercises
+
+1. Add a surrogate key to flights.
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+flights_2 <- 
+flights %>%
+  mutate(key = row_number(flights$month)) 
+```
+
+2. Identify the keys in the following datasets
+
+      1. Lahman::Batting,
+      2. babynames::babynames
+      3. nasaweather::atmos
+      4. fueleconomy::vehicles
+      5. ggplot2::diamonds
+      (You might need to install some packages and read some documentation.)
+      
+```{r}
+library(Lahman)
+library(babynames)
+library(nasaweather)
+library(fueleconomy)
+
+?Batting # no primary key 
+keyID <- which(lapply(colnames(Batting), function(x) {Batting %>% count(Batting[,x]) %>% select(n) %>% unique() %>% nrow()}) %>% unlist() == 1)
+colnames(Batting)[keyID]
+
+?babynames
+colnames(babynames)
+head(babynames)
+
+babynames %>% 
+  count(year, sex, name) %>%
+  filter(nn > 1)
+
+?atmos
+atmos %>% 
+  count(lat, long, year, month) %>%
+  filter(n > 1)
+
+?vehicles
+vehicles %>%
+  count(id) %>%
+  filter(n > 1)
+
+?diamonds
+diamonds %>%
+  count(carat, cut, color, clarity, x, y, z, depth, table, price) %>%
+  filter(n > 1)
+# no key 
+```
+
+3. Draw a diagram illustrating the connections between the Batting, Master, and Salaries tables in the Lahman package. Draw another diagram that shows the relationship between Master, Managers, AwardsManagers.
+
+How would you characterise the relationship between the Batting, Pitching, and Fielding tables?
+```{r}
+# From Julin
+# devtools::install_github("bergant/datamodelr")
+library(datamodelr) 
+# https://github.com/bergant/datamodelr 
+```
+
+
+
