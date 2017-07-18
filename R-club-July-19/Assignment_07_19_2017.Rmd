@@ -1,0 +1,141 @@
+---
+title: "Assignment_07_19_2017"
+author: "Ruijuan Li"
+date: "7/18/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+# 14.3.1.1 Exercises
+
+1. Explain why each of these strings don’t match a \: "\", "\\", "\\\".
+* "\": This will escape the next character in the R string.
+* "\\": This will resolve to \ in the regular expression, which will escape the next character in the regular expression.
+* "\\\": The first two backslashes will resolve to a literal backslash in the regular expression, the third will escape the next character. So in the regular expresion, this will escape some escaped character. 
+```{r}
+x1 <- "a\\b"
+writeLines(x)
+
+x <- "a\b"
+writeLines(x)
+
+x <- "a\\\b"
+writeLines(x)
+
+x <- "a\\\\b"
+writeLines(x)
+
+#> a\b 
+str_view(x1, "\\\\") 
+```
+
+2. How would you match the sequence "'\?
+```{r}
+x <- "\"\'\\"
+writeLines(x)
+
+str_view(x, "\"\'\\\\") 
+```
+
+3. What patterns will the regular expression \..\..\.. match? How would you represent it as a string?
+
+      It will match any patterns that are a dot followed by any character, repeated three times. (???)
+
+# 14.3.2.1 Exercises
+
+1. How would you match the literal string "$^$"?
+```{r}
+x <- "$^$"
+writeLines(x)
+
+str_view(x, "^\\$\\^\\$$")
+```
+
+2. Given the corpus of common words in stringr::words, create regular expressions that find all words that:
+
+      1. Start with “y”.
+      2. End with “x”
+      3. Are exactly three letters long. (Don’t cheat by using str_length()!)
+      4. Have seven letters or more.
+
+```{r}
+str_view(c("yes", "happy"), "^y")
+str_view(c("tax", "xmas"), "x$")
+str_view(c("tax", "xmas"), "^[a-zA-Z]{3}$")
+str_view(c("birthday", "today", "Christmas"), "^[a-zA-Z]{7,}$")
+```
+
+Since this list is long, you might want to use the match argument to str_view() to show only the matching or non-matching words.
+
+# 14.3.3.1 Exercises
+
+1. Create regular expressions to find all words that:
+
+      1. Start with a vowel.
+
+      2. That only contain consonants. (Hint: thinking about matching “not”-vowels.)
+
+      3. End with ed, but not with eed.
+
+      4. End with ing or ise.
+      
+```{r}
+str_view(c("birthday", "Auburn", "earth", "iMac", "ohh", "Urea"), "^[aeiouAEIOU]")
+
+str_view(c("birthday", "Auburn", "earth", "iMac", "ohh", "Urea"), "^[a|e|i|o|u|A|E|I|O|U]")
+
+str_view(c("birthday", "Auburn", "earth", "iMac", "ohh", "Urea"), "^[^a|e|i|o|u|A|E|I|O|U]")
+
+str_view(c("led", "let", "seed"), "[^e]ed$")
+
+str_view(c("ending", "rise", "seed"), "ise$|ing$") 
+```
+
+2. Empirically verify the rule “i before e except after c”.
+
+3. Is “q” always followed by a “u”?
+```{r}
+str_view(stringr::words, "qu", match = T)
+```
+
+4. Write a regular expression that matches a word if it’s probably written in British English, not American English.
+https://jrnold.github.io/e4qf/strings.html
+
+5. Create a regular expression that will match telephone numbers as commonly written in your country.
+```{r}
+x <- c("123-456-7890", "1235-2351")
+str_view(x, "\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d")
+```
+
+# 14.3.4.1 Exercises
+
+1. Describe the equivalents of ?, +, * in {m,n} form.
+```{r}
+str_view(c("birthday", "today", "Christmas", "happy", "happpy"), "(p)?")
+str_view(c("birthday", "today", "Christmas", "happy", "happpy"), "p?") 
+```
+
+2. Describe in words what these regular expressions match: (read carefully to see if I’m using a regular expression or a string that defines a regular expression.)
+
+      ^.*$
+      "\\{.+\\}"
+      \d{4}-\d{2}-\d{2}
+      "\\\\{4}"
+      
+3. Create regular expressions to find all words that:
+
+      Start with three consonants.
+      Have three or more vowels in a row.
+      Have two or more vowel-consonant pairs in a row.
+
+4. Solve the beginner regexp crosswords at https://regexcrossword.com/challenges/beginner.
+
+
+
+

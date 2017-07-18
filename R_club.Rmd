@@ -1064,5 +1064,73 @@ str_sort(x, locale = "haw") # Hawaiian
 #> [1] "apple"    "eggplant" "banana"
 ```
 
+# 07-19-2017 
+```{r}
+library(tidyverse)
+library(stringr)
+# 14.3 Matching patterns with regular expressions
+x <- c("apple", "banana", "pear")
+str_view(x, "an")
 
+str_view(x, ".a.") # . matches any character except for new line 
+# to create the regular expression \. we need the string "\\." 
+
+# To create the regular expression, we need \\
+dot <- "\\."
+
+# But the expression itself only contains one:
+writeLines(dot)
+#> \.
+
+# And this tells R to look for an explicit .
+str_view(c("abc", "a.c", "bef"), "a\\.c")
+
+# to match a literal \ you need to write "\\\\" — you need four backslashes to match one 
+x <- "a\\b"
+writeLines(x)
+#> a\b
+
+str_view(x, "\\\\")
+
+# 14.3.2 Anchors
+x <- c("apple", "banana", "pear")
+str_view(x, "^a")
+
+str_view(x, "a$")
+
+x <- c("apple pie", "apple", "apple cake")
+str_view(x, "apple")
+str_view(x, "^apple$")
+
+# 14.3.3 Character classes and alternatives
+# \d: matches any digit.
+# \s: matches any whitespace (e.g. space, tab, newline).
+# [abc]: matches a, b, or c.
+# [^abc]: matches anything except a, b, or c.
+str_view(c("grey", "gray"), "gr(e|a)y")
+
+# 14.3.4 Repetition
+# ?: 0 or 1
+# +: 1 or more
+# *: 0 or more
+
+x <- "1888 is the longest year in Roman numerals: MDCCCLXXXVIII"
+str_view(x, "CC?")
+
+str_view(x, "CC+")
+str_view(x, 'C[LX]+')
+
+# you can also specify the number of matches precisely:
+
+# {n}: exactly n
+# {n,}: n or more
+# {,m}: at most m
+# {n,m}: between n and m
+
+str_view(x, "C{2}")
+str_view(x, "C{2,}")
+str_view(x, "C{2,3}")
+
+
+```
 
