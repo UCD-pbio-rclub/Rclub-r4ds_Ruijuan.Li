@@ -1090,7 +1090,7 @@ x <- "a\\b"
 writeLines(x)
 #> a\b
 
-str_view(x, "\\\\")
+str_view(x, "\\\\") 
 
 # 14.3.2 Anchors
 x <- c("apple", "banana", "pear")
@@ -1253,6 +1253,24 @@ sentences %>%
   head(5)
 
 head(sentences, 5)
+
+sentences %>%
+  head(5) %>% 
+  str_split(" ")
+
+"a|b|c|d" %>% 
+  str_split("\\|") %>% 
+  .[[1]]
+
+"a|b|c|d" %>% 
+  str_split("\\|")
+
+sentences %>%
+  head(5) %>% 
+  str_split(" ", simplify = TRUE)
+
+str_view("bananana", "(..)\\1{1}") # don't understand this... two letters repeat twice 
+str_view("pepper", "(.)(.)\\1") 
 
 
 ```
