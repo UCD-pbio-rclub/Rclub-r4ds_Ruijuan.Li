@@ -980,9 +980,83 @@ flights2 %>%
 
 flights2 %>%
   select(-origin, -dest) %>% 
-  mutate(name = airlines$name[match(carrier, airlines$carrier)])
+  mutate(name = airlines$name[match(carrier, airlines$carrier)]) 
 
+# 13.4.1 Understanding joins
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     3, "x3"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2",
+     4, "y3"
+)
 
+x
+y
+
+# 13.4.2 Inner join
+x %>% 
+  inner_join(y, by = "key")
+
+# 13.4.3 Outer joins
+
+# 13.4.4 Duplicate keys
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     2, "x3",
+     1, "x4"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2"
+)
+left_join(x, y, by = "key")
+
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     2, "x3",
+     3, "x4"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2",
+     2, "y3",
+     3, "y4"
+)
+left_join(x, y, by = "key")
+
+# 13.4.5 Defining the key columns
+flights2 %>% 
+  left_join(weather)
+
+colnames(flights2)
+colnames(weather)
+
+intersect(colnames(flights2), colnames(weather))
+
+flights2 %>% 
+  left_join(planes, by = "tailnum")
+
+colnames(flights2)
+colnames(airports)
+
+flights2 %>% 
+  left_join(airports, c("dest" = "faa")) %>%
+  colnames()
+
+flights2 %>% 
+  left_join(airports, c("origin" = "faa"))
 
 
 
@@ -1270,8 +1344,28 @@ sentences %>%
   str_split(" ", simplify = TRUE)
 
 str_view("bananana", "(..)\\1{1}") # don't understand this... two letters repeat twice 
-str_view("pepper", "(.)(.)\\1") 
+str_view("pepper", "(.)(.)\\1")  
+```
+
+# 13.5 Filtering joins
+```{r}
+top_dest <- flights %>%
+  count(dest, sort = TRUE) %>%
+  head(10)
+
+top_dest
+
+flights %>% 
+  filter(dest %in% top_dest$dest)
+
+flights %>% 
+  semi_join(top_dest) %>%
+  select(dest) %>%
+  unique()
 
 
 ```
+
+
+
 

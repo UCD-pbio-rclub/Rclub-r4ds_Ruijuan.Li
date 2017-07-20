@@ -252,9 +252,9 @@ str_view(x, "[[:alpha:]]+$")
 ```{r}
 x <- c("apples, pears, and bananas")
 x
-str_split(x, ", +(and +)?") 
-str_split(x, ", +(and +)?")[[1]] 
-
+str_split(x, ", +(and +)?") # ??? 
+str_split(x, ", +(and +)?,") 
+str_split(x, ", +(and +)?")[[1]]  
 ```
 
 2. Why is it better to split up by boundary("word") than " "?
@@ -263,20 +263,28 @@ Splitting by boundary("word") splits on punctuation and not just whitespace.
 3. What does splitting with an empty string ("") do? Experiment, and then read the documentation. 
 ```{r}
 str_split("", "") 
+str_split("ABC", "")[[1]]
 ```
 
 
 # 14.5.1 Exercises
 
 1. How would you find all strings containing \ with regex() vs. with fixed()?
+```{r}
+str_subset(c("a\\b", "ab"), "\\\\")
+str_subset(c("a\\b", "ab"), fixed("\\"))
+```
 
 2. What are the five most common words in sentences?
+```{r}
+
+```
 
 # 14.7.1 Exercises
 
 1. Find the stringi functions that:
 
-      1. Count the number of words.
+      1. Count the number of words. 
       2. Find duplicated strings.
       3. Generate random text.
 2. How do you control the language that stri_sort() uses for sorting?
