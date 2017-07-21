@@ -1363,6 +1363,10 @@ flights %>%
   select(dest) %>%
   unique()
 
+flights %>%
+  anti_join(planes, by = "tailnum") %>%
+  count(tailnum, sort = TRUE)
+
 
 ```
 
