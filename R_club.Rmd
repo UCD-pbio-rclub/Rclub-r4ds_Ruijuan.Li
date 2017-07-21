@@ -1406,6 +1406,77 @@ ggplot(gss_cat, aes(race)) +
   geom_bar() +
   scale_x_discrete(drop = FALSE)
 
+relig_summary <- gss_cat %>%
+  group_by(relig) %>%
+  summarise(
+    age = mean(age, na.rm = TRUE),
+    tvhours = mean(tvhours, na.rm = TRUE),
+    n = n()
+  )
+
+ggplot(relig_summary, aes(tvhours, relig)) + geom_point()
+
+ggplot(relig_summary, aes(tvhours, fct_reorder(relig, tvhours))) +
+  geom_point() # this can be useful when plotting my own data 
+
+?fct_reorder
+
+relig_summary %>%
+  mutate(relig = fct_reorder(relig, tvhours)) %>%
+  ggplot(aes(tvhours, relig)) +
+    geom_point()
+
+relig_summary %>%
+  mutate(relig = fct_reorder(relig, tvhours))
+
+rincome_summary <- gss_cat %>%
+  group_by(rincome) %>%
+  summarise(
+    age = mean(age, na.rm = TRUE),
+    tvhours = mean(tvhours, na.rm = TRUE),
+    n = n()
+  )
+
+ggplot(rincome_summary, aes(age, fct_reorder(rincome, age))) + geom_point() 
+ggplot(rincome_summary, aes(age, fct_relevel(rincome, "Not applicable"))) +
+  geom_point()
+
+?fct_reorder
+?fct_relevel
+
+by_age <- gss_cat %>%
+  filter(!is.na(age)) %>%
+  group_by(age, marital) %>%
+  count() %>%
+  mutate(prop = n / sum(n))
+
+ggplot(by_age, aes(age, prop, colour = marital)) +
+  geom_line(na.rm = TRUE)
+
+ggplot(by_age, aes(age, prop, colour = fct_reorder2(marital, age, prop))) +
+  geom_line() +
+  labs(colour = "marital")
+
+ggplot(by_age, aes(age, prop, colour = fct_reorder2(marital, age, prop))) +
+  geom_line() +
+  labs(colour = "marital") # color lined up with legend color 
+
+?fct_reorder2
+
+gss_cat %>%
+  mutate(marital = marital %>% fct_infreq() %>% fct_rev()) %>%
+  ggplot(aes(marital)) +
+    geom_bar()
+
+gss_cat %>%
+  mutate(marital = marital %>% fct_infreq() %>% fct_rev())
+?fct_infreq
+?fct_rev
+
+f <- factor(c("b", "b", "a", "c", "c", "c"))
+fct_infreq(f) # from the most frequent to the least frequent... 
+
+
 
 
 
