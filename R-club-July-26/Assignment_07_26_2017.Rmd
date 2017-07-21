@@ -1,0 +1,10 @@
+---
+title: "Assignment_07_26_2017"
+author: "Ruijuan Li"
+date: "7/21/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+

@@ -69,7 +69,7 @@ How would you characterise the relationship between the Batting, Pitching, and F
 ```{r}
 # From Julin
 # devtools::install_github("bergant/datamodelr")
-library(datamodelr) 
+# library(datamodelr) 
 # https://github.com/bergant/datamodelr 
 ```
 

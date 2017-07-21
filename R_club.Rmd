@@ -1366,6 +1366,47 @@ flights %>%
 flights %>%
   anti_join(planes, by = "tailnum") %>%
   count(tailnum, sort = TRUE)
+```
+
+# 07-26-2017 
+```{r}
+library(tidyverse)
+library(forcats)
+
+# 15.2 Creating factors
+x1 <- c("Dec", "Apr", "Jan", "Mar")
+x1
+
+month_levels <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
+
+y1 <- factor(x1, levels = month_levels)
+y1
+
+sort(y1)
+
+x2 <- c("Dec", "Apr", "Jam", "Mar")
+y2 <- factor(x2, levels = month_levels)
+y2
+
+y2 <- parse_factor(x2, levels = month_levels)
+
+# 15.3 General Social Survey 
+gss_cat
+
+gss_cat %>%
+  count(race)
+
+ggplot(gss_cat, aes(race)) +
+  geom_bar()
+
+ggplot(gss_cat, aes(race)) +
+  geom_bar() +
+  scale_x_discrete(drop = FALSE)
+
+
 
 
 ```
