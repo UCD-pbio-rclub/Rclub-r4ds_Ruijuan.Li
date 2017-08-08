@@ -1,0 +1,55 @@
+---
+title: "R-club-Aug-8"
+author: "Ruijuan Li"
+date: "8/8/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+#### pipes 
+```{r}
+library(magrittr)
+```
+
+# adding 
+```{r}
+# install.packages("pryr")
+library(pryr)
+diamonds <- ggplot2::diamonds
+diamonds2 <- diamonds %>% 
+  dplyr::mutate(price_per_carat = price / carat)
+
+pryr::object_size(diamonds)
+#> 3.46 MB
+pryr::object_size(diamonds2)
+#> 3.89 MB
+pryr::object_size(diamonds, diamonds2)
+#> 3.89 MB
+
+# create new object for intermediate output doesn't take more memory 
+```
+
+```{r}
+?tryCatch
+?try
+?suppressMessages
+?suppressWarnings
+```
+
+#### T-pipe
+```{r}
+rnorm(100) %>%
+  matrix(ncol = 2) %>%
+  plot() %>%
+  str()
+
+rnorm(100) %>%
+  matrix(ncol = 2) %T>%
+  plot() %>%
+  str()0
+
+mtcars %$%
+  cor(disp, mpg)
+```
+
