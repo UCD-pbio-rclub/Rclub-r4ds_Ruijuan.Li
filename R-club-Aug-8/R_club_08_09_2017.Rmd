@@ -1,0 +1,27 @@
+---
+title: "test"
+author: "Ruijuan Li"
+date: "8/9/2017"
+output: html_document
+---
+
+# T pipe 
+```{r}
+rnorm(100) %>%
+  matrix(ncol = 2) %>%
+  plot() %>%
+  str()
+
+rnorm(100) %>%
+  matrix(ncol = 2) %T>%
+  plot() %>%
+  str()
+```
+
+# hms
+```{r}
+library(hms)
+# lubridate R package helps figure parse the data & time variable 
+?hm
+```
+
