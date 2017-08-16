@@ -1474,14 +1474,38 @@ gss_cat %>%
 ?fct_rev
 
 f <- factor(c("b", "b", "a", "c", "c", "c"))
-fct_infreq(f) # from the most frequent to the least frequent... 
+fct_infreq(f) # from the most frequent to the least frequent...  
+```
 
+### 08-16-2017 
+```{r}
+# 19.1 -- 19.4 
+# 19.3.1 skip
+# Functions
 
+# intro 
+# 19.3 Functions are for humans and computers 
+
+# 19.4 Conditional execution
+# vecterized ??? don't understand... 
+
+x <- sqrt(2) ^ 2
+x
+#> [1] 2
+x == 2
+#> [1] FALSE
+x - 2
+#> [1] 4.44e-16
+
+# Instead use dplyr::near() for comparisons, as described in comparisons.
+
+# use swtich(), cut(), instead of many if in conditional statement 
+
+# 19.4.3 Code style
 
 
 
 ```
-
 
 
 
