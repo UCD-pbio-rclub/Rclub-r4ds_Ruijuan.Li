@@ -1501,7 +1501,7 @@ x - 2
 
 # use swtich(), cut(), instead of many if in conditional statement 
 
-# 19.4.3 Code style
+# 19.4.3 Code style 
 
 
 

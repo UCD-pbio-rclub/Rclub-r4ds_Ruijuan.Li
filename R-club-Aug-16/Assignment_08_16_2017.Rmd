@@ -16,7 +16,8 @@ rescale01 <- function(x) {
   (x - rng[1]) / (rng[2] - rng[1])
 }
 
-rescale01(c(1, 2, 3, NA, 5)) # all NAs
+rescale01(c(1, 2, 3, NA, 5)) # all NAs 
+# ? message to give message output 
 ```
 
 2) In the second variant of rescale01(), infinite values are left unchanged. Rewrite rescale01() so that -Inf is mapped to 0, and Inf is mapped to 1.
@@ -29,7 +30,7 @@ rescale01 <- function(x) {
   y
 }
 
-x <- c(1:10, -Inf, Inf)
+x <- c(1:10, -Inf, Inf) 
 rescale01(x) 
 ```
 
@@ -68,7 +69,6 @@ coeffi.var(x)
 
 ```
 
-
 5) Write both_na(), a function that takes two vectors of the same length and returns the number of positions that have an NA in both vectors.
 ```{r}
 both_na <- function(x, y){
@@ -79,9 +79,11 @@ both_na <- function(x, y){
   }
 }
 
-x <- c(1, 4, 7, NA, 9, 10, 12, 16, NA, NA)
+x <- c(1, 4, 7, NA, 9, 10, 12, 16, NA, NA, 13)
 y <- c(1, 4, 7, NA, 9, 10, 12, 16, NA, 12)
 both_na(x, y)
+
+# use stop to generate R stype error message 
 ```
 
 6) What do the following functions do? Why are they useful even though they are so short?
@@ -195,6 +197,7 @@ mean(c(1.1, 3, 4), trim = .1)
 mean(c(1.1, 3, 4))
 
 switch(2, "one", "two", "three")
+# use code chunk error=TRUE to keep going even when there error 
 ```
 
 6) What does this switch() call do? What happens if x is “e”?
@@ -208,11 +211,13 @@ tmp_function <- function(x){
   )
 } 
 
-tmp_function("a")
+tmp_function("a") # because there is no value to return, switch will look for the next defined 
 tmp_function("b")
 tmp_function("c")
 tmp_function("d")
-tmp_function("e")
+tmp_function("e") 
+?switch
+# switch can be very useful when embeded in a function 
 ``` 
 Experiment, then carefully read the documentation.
 
