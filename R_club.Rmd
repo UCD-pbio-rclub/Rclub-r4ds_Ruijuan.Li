@@ -1538,6 +1538,76 @@ rule("Important output")
 stringr::str_dup("=", width)
 cat(title, " ", stringr::str_dup("=", width), "\n", sep = "")
 
+show_missings <- function(df) {
+  n <- sum(is.na(df))
+  cat("Missing values: ", n, "\n", sep = "")
+  
+  invisible(df) # but even without this function df is not getting printed out. 
+}
+
+show_missings(mtcars)
+
+show_missings_2 <- function(df) {
+  n <- sum(is.na(df))
+  cat("Missing values: ", n, "\n", sep = "")
+  
+  #invisible(df)
+}
+
+show_missings_2(mtcars)
+x1 <- show_missings_2(mtcars) 
+x2 <- show_missings(mtcars) # don't understand why this makes the diference. 
+x2
+
+### Envirionment # don't understand 
+# Chapter 20 Vectors 
+# need purr package 
+library(tidyverse)
+
+# Vector basics 
+# The chief difference between atomic vectors and lists is that atomic vectors are homogeneous, while lists can be heterogeneous.  
+
+class(letters)
+typeof(letters)
+
+?class
+?typeof
+
+# Vectors can also contain arbitrary additional metadata in the form of attributes. These attributes are used to create augmented vectors which build on additional behaviour. There are four important types of augmented vector:
+
+# Factors are built on top of integer vectors.
+# Dates and date-times are built on top of numeric vectors.
+# Data frames and tibbles are built on top of lists.
+
+# so data frames and tibbles can be hetergeneous.  
+
+# important types of atomic vector
+
+# logic
+# numeric
+typeof(1)
+typeof(1L)
+1.5L
+
+# difference between double and interger 
+# 1) doubles are approximations ??? 
+x <- sqrt(2) ^ 2
+x
+x - 2
+
+sqrt(2) ^ 2 == 2
+near(sqrt(2) ^ 2, 2)
+
+# Integers have one special value: NA, while doubles have four: NA, NaN, Inf and -Inf. 
+
+# character
+# missing values
+NA            # logical
+NA_integer_   # integer
+NA_real_      # double
+NA_character_ # character
+
+
 
 ```
 
