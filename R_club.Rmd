@@ -1502,7 +1502,41 @@ x - 2
 # use swtich(), cut(), instead of many if in conditional statement 
 
 # 19.4.3 Code style 
+```
 
+### 08-23-2017 
+```{r}
+# 19.5 Function arguments 
+# 19.5.1 choosing names 
+# 19.5.2 checking values 
+# It’s good practice to check important preconditions, and throw an error (with stop()), if they are not true: 
+
+# Be careful not to take this too far. There’s a tradeoff between how much time you spend making your function robust, versus how long you spend writing it. 
+
+# A useful compromise is the built-in stopifnot(): it checks that each argument is TRUE, and produces a generic error message if not.
+
+# 19.5.3 Dot-dot-dot 
+# Many functions in R take an arbitrary number of inputs: How do these functions work? They rely on a special argument: ... (pronounced dot-dot-dot). 
+
+commas <- function(...) stringr::str_c(..., collapse = ", ")
+commas(letters[1:10])
+
+# It’s useful because you can then send those ... on to another function. This is a useful catch-all if your function primarily wraps another function.
+
+rule <- function(..., pad = "-") {
+  title <- paste0(...) # paste0(..., collapse) is equivalent to paste(..., sep = "", collapse), slightly more efficiently 
+  width <- getOption("width") - nchar(title) - 5
+  cat(title, " ", stringr::str_dup(pad, width), "\n", sep = "")
+}
+rule("Important output")
+
+?paste0
+?getOption 
+
+(title <- paste0("Important output")) # paste0(..., collapse) is equivalent to paste(..., sep = "", collapse), slightly more efficiently 
+(width <- getOption("width") - nchar(title) - 5)
+stringr::str_dup("=", width)
+cat(title, " ", stringr::str_dup("=", width), "\n", sep = "")
 
 
 ```
