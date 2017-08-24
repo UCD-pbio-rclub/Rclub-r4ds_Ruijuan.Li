@@ -1549,13 +1549,14 @@ show_missings(mtcars)
 
 show_missings_2 <- function(df) {
   n <- sum(is.na(df))
-  cat("Missing values: ", n, "\n", sep = "")
+  paste("Missing values: ", n, "\n", sep = "")
   
   #invisible(df)
 }
 
 show_missings_2(mtcars)
 x1 <- show_missings_2(mtcars) 
+x1
 x2 <- show_missings(mtcars) # don't understand why this makes the diference. 
 x2
 
@@ -1605,10 +1606,7 @@ near(sqrt(2) ^ 2, 2)
 NA            # logical
 NA_integer_   # integer
 NA_real_      # double
-NA_character_ # character
-
-
-
+NA_character_ # character 
 ```
 
 

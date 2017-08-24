@@ -16,6 +16,9 @@ library(readr)
 ```{r}
 class(is.finite(1))
 class(!is.infinite(1))
+is.finite(NA)
+!is.infinite(NA)
+# NA is neither finite nor infinite 
 ```
 
 2. Read the source code for dplyr::near() (Hint: to see the source code, drop the ()). How does it work?
@@ -33,7 +36,7 @@ doub_to_int1 <- function(x){
   if(typeof(x) != "double"){
     warning("input is not double, stop")
   } else {
-    as.integer(x)
+    as.integer(x) 
   }
 }
 
