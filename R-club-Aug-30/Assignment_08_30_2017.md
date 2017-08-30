@@ -154,13 +154,48 @@ is.atomic(list())
 3. Compare and contrast setNames() with purrr::set_names().
 
 ```r
-# setNames( 1:3, c("foo", "bar", "baz") )
-# set_names(1:4, c("a", "b", "c", "d"))
-# 
-# # setNames(letters[1:5])
-# set_names(letters[1:5]) # allow missing name 
-# setNames(nm = c("First", "2nd")) # allow missing object
-# set_names(nm = c("First", "2nd"))
+setNames( 1:3, c("foo", "bar", "baz") )
+```
+
+```
+## foo bar baz 
+##   1   2   3
+```
+
+```r
+set_names(1:4, c("a", "b", "c", "d"))
+```
+
+```
+## a b c d 
+## 1 2 3 4
+```
+
+```r
+# setNames(letters[1:5])
+set_names(letters[1:5]) # allow missing name
+```
+
+```
+##   a   b   c   d   e 
+## "a" "b" "c" "d" "e"
+```
+
+```r
+setNames(nm = c("First", "2nd")) # allow missing object
+```
+
+```
+##   First     2nd 
+## "First"   "2nd"
+```
+
+```r
+set_names(nm = c("First", "2nd"))
+```
+
+```
+## Error in typeof(x): argument "x" is missing, with no default
 ```
 
 4. Create functions that take a vector as input and returns:
