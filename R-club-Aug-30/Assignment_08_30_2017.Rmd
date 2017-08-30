@@ -79,8 +79,13 @@ last(x)
 even_pos <- function(x){
   pos <- sapply(1: length(x), function(i) i %% 2 ==0)
   x[pos]
-  }
+}
 even_pos(x) 
+
+even_pos_1 <- function(x){
+  x[c(FALSE,TRUE)]
+}
+even_pos_1(x)
 
 # 3
 drop_last <- function(x){x[1:length(x)-1]}
@@ -103,13 +108,12 @@ x[x <= 0]
 # why? 
 ```
 
-
 6. What happens when you subset with a positive integer that’s bigger than the length of the vector? What happens when you subset with a name that doesn’t exist?
 ```{r}
 length(x)
 x[length(x) + 1]
 x <- setNames(x, nm = c(1:length(x)))
-x["104"]
+x["104"] 
 ```
 
 ### 20.5.4 Exercises
@@ -139,7 +143,7 @@ typeof(x) # double
 
 2. Try and make a tibble that has columns with different lengths. What happens?
 ```{r, error=TRUE}
-# tb <- tibble::tibble(x = 1:5, y = 5:0)
+tb <- tibble::tibble(x = 1:5, y = 5:0)
 ```
 
 3. Based on the definition above, is it ok to have a list as a column of a tibble?

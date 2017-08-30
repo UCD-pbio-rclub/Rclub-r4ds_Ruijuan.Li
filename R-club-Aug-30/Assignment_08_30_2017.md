@@ -239,8 +239,21 @@ last(x)
 even_pos <- function(x){
   pos <- sapply(1: length(x), function(i) i %% 2 ==0)
   x[pos]
-  }
+}
 even_pos(x) 
+```
+
+```
+##  [1]  8 19 18 14  2  4  8 10 20 16  5  3  8  8  7 12  4 14  3  9 13 12 16
+## [24] 10 14 18  5  2 11  9  6  7  6 16 18 17  7 18  8 20 15  7  5  3  3  2
+## [47] 18 16  9 13
+```
+
+```r
+even_pos_1 <- function(x){
+  x[c(FALSE,TRUE)]
+}
+even_pos_1(x)
 ```
 
 ```
@@ -315,7 +328,6 @@ x[x <= 0]
 # why? 
 ```
 
-
 6. What happens when you subset with a positive integer that’s bigger than the length of the vector? What happens when you subset with a name that doesn’t exist?
 
 ```r
@@ -336,7 +348,7 @@ x[length(x) + 1]
 
 ```r
 x <- setNames(x, nm = c(1:length(x)))
-x["104"]
+x["104"] 
 ```
 
 ```
@@ -402,7 +414,12 @@ typeof(x) # double
 2. Try and make a tibble that has columns with different lengths. What happens?
 
 ```r
-# tb <- tibble::tibble(x = 1:5, y = 5:0)
+tb <- tibble::tibble(x = 1:5, y = 5:0)
+```
+
+```
+## Error: Variables must be length 1 or 6.
+## Problem variables: 'x'
 ```
 
 3. Based on the definition above, is it ok to have a list as a column of a tibble?

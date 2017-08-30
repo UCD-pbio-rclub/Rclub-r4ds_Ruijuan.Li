@@ -224,8 +224,15 @@ last(x)</code></pre>
 even_pos &lt;- function(x){
   pos &lt;- sapply(1: length(x), function(i) i %% 2 ==0)
   x[pos]
-  }
+}
 even_pos(x) </code></pre>
+<pre><code>##  [1]  8 19 18 14  2  4  8 10 20 16  5  3  8  8  7 12  4 14  3  9 13 12 16
+## [24] 10 14 18  5  2 11  9  6  7  6 16 18 17  7 18  8 20 15  7  5  3  3  2
+## [47] 18 16  9 13</code></pre>
+<pre class="r"><code>even_pos_1 &lt;- function(x){
+  x[c(FALSE,TRUE)]
+}
+even_pos_1(x)</code></pre>
 <pre><code>##  [1]  8 19 18 14  2  4  8 10 20 16  5  3  8  8  7 12  4 14  3  9 13 12 16
 ## [24] 10 14 18  5  2 11  9  6  7  6 16 18 17  7 18  8 20 15  7  5  3  3  2
 ## [47] 18 16  9 13</code></pre>
@@ -271,7 +278,7 @@ x</code></pre>
 <pre class="r"><code>x[length(x) + 1]</code></pre>
 <pre><code>## [1] NA</code></pre>
 <pre class="r"><code>x &lt;- setNames(x, nm = c(1:length(x)))
-x[&quot;104&quot;]</code></pre>
+x[&quot;104&quot;] </code></pre>
 <pre><code>## &lt;NA&gt; 
 ##   NA</code></pre>
 </div>
@@ -308,7 +315,9 @@ x</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Try and make a tibble that has columns with different lengths. What happens?</li>
 </ol>
-<pre class="r"><code># tb &lt;- tibble::tibble(x = 1:5, y = 5:0)</code></pre>
+<pre class="r"><code>tb &lt;- tibble::tibble(x = 1:5, y = 5:0)</code></pre>
+<pre><code>## Error: Variables must be length 1 or 6.
+## Problem variables: 'x'</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Based on the definition above, is it ok to have a list as a column of a tibble?</li>
 </ol>
