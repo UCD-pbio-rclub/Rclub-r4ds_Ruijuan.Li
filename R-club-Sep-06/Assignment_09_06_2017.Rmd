@@ -1,0 +1,202 @@
+---
+title: "Assignment_09_06_2017"
+author: "Ruijuan Li"
+date: "9/6/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+### 21.2.1 Exercises
+
+1. Write for loops to:
+
+      1. Compute the mean of every column in mtcars.
+      2. Determine the type of each column in nycflights13::flights.
+      3. Compute the number of unique values in each column of iris.
+      4. Generate 10 random normals for each of μ=−10, 0, 10, and 100.
+      
+Think about the output, sequence, and body before you start writing the loop.
+```{r}
+library(tidyverse)
+
+# 1) 
+mean.mtcars <- vector()
+for (i in colnames(mtcars)) {
+  mean.mtcars[[i]] <- mean(mtcars[,i])  
+}
+mean.mtcars
+
+# 2) 
+type_flights <- vector()
+for (i in colnames(nycflights13::flights)){
+  type_flights[[i]] <- typeof(nycflights13::flights[[i]])
+}
+type_flights
+
+# 3) 
+uniq_num_iris <- vector()
+for (i in colnames(iris)){
+  uniq_num_iris[[i]] <- length(unique(iris[,i]))
+}
+uniq_num_iris
+
+# 4) 
+ran_norm <- list()
+mean <- c(-10, 0, 10, 100)
+for (i in seq_along(mean)){
+  ran_norm[[i]] <- rnorm(n = 10, mean = mean[[i]])
+}
+ran_norm
+```
+
+2. Eliminate the for loop in each of the following examples by taking advantage of an existing function that works with vectors:
+
+```{r}
+# out <- ""
+# for (x in letters) {
+#   out <- stringr::str_c(out, x)
+# }
+
+# str_c(letters, collapse = "")
+
+set.seed(1)
+x <- sample(100)
+sd <- 0
+for (i in seq_along(x)) {
+  sd <- sd + (x[i] - mean(x)) ^ 2
+}
+sd <- sqrt(sd / (length(x) - 1))
+
+sd(x)
+
+set.seed(1)
+x <- runif(100)
+out <- vector("numeric", length(x))
+out[1] <- x[1]
+for (i in 2:length(x)) {
+  out[i] <- out[i - 1] + x[i]
+}
+out
+
+cumsum(x)
+```
+
+3. Combine your function writing and for loop skills:
+
+      1. Write a for loop that prints() the lyrics to the children’s song “Alice the camel”.
+
+      2. Convert the nursery rhyme “ten in the bed” to a function. Generalise it to any number of people in any sleeping structure.
+
+      3. Convert the song “99 bottles of beer on the wall” to a function. Generalise to any number of any vessel containing any liquid on any surface.
+```{r}
+lyrics <- read.delim("~/Desktop/2017_summer/Rclub-r4ds_Ruijuan.Li/R-club-Sep-06/lyrics", header = F, stringsAsFactors = F)
+
+for (i in rownames(lyrics)){
+  print(lyrics[i,])
+} 
+
+# skip... 
+```
+
+4. It’s common to see for loops that don’t preallocate the output and instead increase the length of a vector at each step:
+
+```{r}
+output <- vector("integer", 0)
+system.time(
+for (i in seq_along(x)) {
+  output <- c(output, lengths(x[[i]]))
+})
+
+output <- vector()
+system.time(
+for (i in seq_along(x)) {
+  output <- c(output, lengths(x[[i]]))
+})
+
+# how does this affect permformance? 
+# system time? no. memory usage? ... skip 
+```
+How does this affect performance? Design and execute an experiment. 
+
+### 21.3.5 Exercises
+
+1. Imagine you have a directory full of CSV files that you want to read in. You have their paths in a vector, files <- dir("data/", pattern = "\\.csv$", full.names = TRUE), and now want to read each one with read_csv(). Write the for loop that will load them into a single data frame.
+```{r}
+# output <- data_frame() 
+# files <- dir("data/", pattern = "\\.csv$", full.names = TRUE) 
+# for (i in files){
+#   output[[i]] <- read_csv(i) # something like this... 
+# }
+# output 
+
+# a single data frame ? how??? 
+```
+
+2. What happens if you use for (nm in names(x)) and x has no names? What if only some of the elements are named? What if the names are not unique?
+```{r, error=T}
+# no name 
+names(letters)
+
+for (i in names(letters)){
+  print(letters[[i]])
+}
+
+names(letters)[1:3] <- c("A", "B", "C")
+
+for (i in names(letters)){
+  print(letters[[i]])
+}
+
+names(letters) <- c(LETTERS[1:24], "A", "B")
+
+for (i in names(letters)){
+  print(letters[[i]])
+}
+```
+
+3. Write a function that prints the mean of each numeric column in a data frame, along with its name. For example, show_mean(iris) would print:
+
+```{r}
+# show_mean(iris) 
+#> Sepal.Length: 5.84
+#> Sepal.Width:  3.06
+#> Petal.Length: 3.76
+#> Petal.Width:  1.20
+
+iris %>% head()
+
+show_mean <- function(input){
+  output <- data.frame()
+  for (i in colnames(input)){
+    rownames()
+    
+  }  
+}
+
+```
+(Extra challenge: what function did I use to make sure that the numbers lined up nicely, even though the variable names had different lengths?)
+
+4. What does this code do? How does it work?
+
+```{r}
+trans <- list( 
+  disp = function(x) x * 0.0163871,
+  am = function(x) {
+    factor(x, labels = c("auto", "manual"))
+  }
+)
+for (var in names(trans)) {
+  mtcars[[var]] <- trans[[var]](mtcars[[var]])
+}
+```
+
+
+
+
+
+
+
+
+
+

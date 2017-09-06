@@ -1701,6 +1701,34 @@ attributes(tb)
 # The difference between a tibble and a list is that all the elements of a data frame must be vectors with the same length. 
 ```
 
+09-06-2017 Iterations 
+```{r}
+# imperative programming & functional programming 
+df <- tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+output <- vector()  ### ??? 
+for (i in seq_along(df)) {            # 2. sequence
+  output[[i]] <- median(df[[i]])      # 3. body
+}
+output
+typeof(output)
+
+output <- list()  # 1. output
+for (i in seq_along(df)) {            # 2. sequence
+  output[[i]] <- median(df[[i]])      # 3. body
+}
+output
+
+y <- vector("double", 0)
+seq_along(y) # seq_along deal with vector of length 0 
+
+1:length(y)
+```
 
 
 
