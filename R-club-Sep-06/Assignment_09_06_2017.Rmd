@@ -169,11 +169,15 @@ iris %>% head()
 show_mean <- function(input){
   output <- data.frame()
   for (i in colnames(input)){
-    rownames()
-    
+    if(is.numeric(input[,i])){
+    num <- round(mean(input[,i]), 2)
+    output[1,i] <- num
+    }
   }  
-}
+  return(t(output))
+  }
 
+show_mean(iris) # leave it for now... to the next ...  
 ```
 (Extra challenge: what function did I use to make sure that the numbers lined up nicely, even though the variable names had different lengths?)
 
@@ -189,6 +193,8 @@ trans <- list(
 for (var in names(trans)) {
   mtcars[[var]] <- trans[[var]](mtcars[[var]])
 }
+
+
 ```
 
 
