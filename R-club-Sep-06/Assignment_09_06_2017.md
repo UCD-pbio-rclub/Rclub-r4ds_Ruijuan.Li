@@ -125,20 +125,20 @@ ran_norm
 
 ```
 ## [[1]]
-##  [1]  -9.545245  -8.436723  -8.459541 -10.355783  -9.255910 -11.842583
-##  [7]  -9.684475  -8.832702  -9.616203 -11.236991
+##  [1]  -8.745853  -9.706638  -9.960268 -11.428546  -9.975759 -10.372260
+##  [7]  -9.967142  -9.614554  -9.875344 -10.322774
 ## 
 ## [[2]]
-##  [1] -0.5321379  0.2957798 -0.7474174  1.0893718  0.4669644 -0.2284675
-##  [7]  1.1084708  1.2341820 -1.1896395  1.8851507
+##  [1] -1.13574888  0.51147487 -0.02983454  0.29677626  0.49245704
+##  [6] -0.87406905  0.77416118  0.70556634  0.63303508  0.18211134
 ## 
 ## [[3]]
-##  [1] 10.329253 10.281960 10.243860  9.000604  9.720684 10.182890 10.397745
-##  [8]  7.835923  8.972059 10.876702
+##  [1]  9.645109 10.964555  8.903642  8.768426  9.509925  8.715648 10.175726
+##  [8] 11.594839 10.521219 10.185435
 ## 
 ## [[4]]
-##  [1] 100.91357  99.23229  99.35228 100.00930  99.50363 101.03492  99.42985
-##  [8] 101.43541  98.29479 102.09447
+##  [1]  99.95693 101.53248  99.82335 101.44093 101.16204  99.53784 100.89647
+##  [8]  96.90320  98.91335 100.50910
 ```
 
 2. Eliminate the for loop in each of the following examples by taking advantage of an existing function that works with vectors:
@@ -282,7 +282,7 @@ for (i in seq_along(x)) {
 
 ```
 ##    user  system elapsed 
-##       0       0       0
+##   0.001   0.000   0.000
 ```
 
 ```r
@@ -393,11 +393,46 @@ for (i in names(letters)){
 
 
 ```r
-# show_mean(iris)
+# show_mean(iris) 
 #> Sepal.Length: 5.84
 #> Sepal.Width:  3.06
 #> Petal.Length: 3.76
 #> Petal.Width:  1.20
+
+iris %>% head()
+```
+
+```
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa
+```
+
+```r
+show_mean <- function(input){
+  output <- data.frame()
+  for (i in colnames(input)){
+    if(is.numeric(input[,i])){
+    num <- round(mean(input[,i]), 2)
+    output[1,i] <- num
+    }
+  }  
+  print(t(output))
+  }
+
+show_mean(iris) # leave it for now... to the next ...  
+```
+
+```
+##                 1
+## Sepal.Length 5.84
+## Sepal.Width  3.06
+## Petal.Length 3.76
+## Petal.Width  1.20
 ```
 (Extra challenge: what function did I use to make sure that the numbers lined up nicely, even though the variable names had different lengths?)
 
@@ -413,7 +448,7 @@ trans <- list(
 )
 for (var in names(trans)) {
   mtcars[[var]] <- trans[[var]](mtcars[[var]])
-}
+}   
 ```
 
 
