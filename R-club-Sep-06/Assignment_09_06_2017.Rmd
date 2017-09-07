@@ -174,7 +174,7 @@ show_mean <- function(input){
     output[1,i] <- num
     }
   }  
-  return(t(output))
+  print(t(output))
   }
 
 show_mean(iris) # leave it for now... to the next ...  
@@ -192,9 +192,7 @@ trans <- list(
 )
 for (var in names(trans)) {
   mtcars[[var]] <- trans[[var]](mtcars[[var]])
-}
-
-
+} 
 ```
 
 
