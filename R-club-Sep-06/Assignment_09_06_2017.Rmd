@@ -192,7 +192,7 @@ trans <- list(
 )
 for (var in names(trans)) {
   mtcars[[var]] <- trans[[var]](mtcars[[var]])
-} 
+}   
 ```
 
 
