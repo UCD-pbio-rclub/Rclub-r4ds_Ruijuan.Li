@@ -1730,7 +1730,247 @@ seq_along(y) # seq_along deal with vector of length 0
 1:length(y)
 ```
 
+09-12-2017 
+### map 
+```{r}
+library(tidyverse)
+models <- mtcars %>% 
+  split(.$cyl) %>% 
+  map(function(df) lm(mpg ~ wt, data = df))
 
+models <- mtcars %>% 
+  split(.$cyl) %>% 
+  map(~lm(mpg ~ wt, data = .))
+
+models %>% 
+  map(summary) %>% 
+  map_dbl(~.$r.squared)
+
+models %>% 
+  map(summary)
+
+models %>% 
+  map(summary) %>% 
+  map_dbl("r.squared")
+
+x <- list(list(1, 2, 3), list(4, 5, 6), list(7, 8, 9))
+x
+x %>% map_dbl(2)
+
+x1 <- list(
+  c(0.27, 0.37, 0.57, 0.91, 0.20),
+  c(0.90, 0.94, 0.66, 0.63, 0.06), 
+  c(0.21, 0.18, 0.69, 0.38, 0.77)
+)
+x2 <- list(
+  c(0.50, 0.72, 0.99, 0.38, 0.78), 
+  c(0.93, 0.21, 0.65, 0.13, 0.27), 
+  c(0.39, 0.01, 0.38, 0.87, 0.34)
+)
+
+threshold <- function(x, cutoff = 0.8) x[x > cutoff]
+x1 %>% sapply(threshold) %>% str() # diff length 
+#> List of 3
+#>  $ : num 0.91
+#>  $ : num [1:2] 0.9 0.94
+#>  $ : num(0)
+x2 %>% sapply(threshold) %>% str() # same length
+#>  num [1:3] 0.99 0.93 0.87 # why the output here are different... 
+
+# understand different apply!!! 
+# One advantage of vapply() over purrr’s map functions is that it can also produce matrices — the map functions only ever produce vectors. 
+```
+
+Dealing with failure 
+```{r}
+safe_log <- safely(log)
+str(safe_log(10))
+log(10)
+str(safe_log("a"))
+log("a")
+# When the function succeeds, the result element contains the result and the error element is NULL. When the function fails, the result element is NULL and the error element contains an error object 
+
+# safely() is designed to work with map: 
+x <- list(1, 10, "a")
+y <- x %>% map(safely(log))
+str(y)
+y <- y %>% transpose() # transpose function 
+y
+str(y)
+?t # Matrix Transpose
+?transpose # Transpose a list. 
+
+is_ok <- y$error %>% map_lgl(is_null) # y is result, error is error  
+y$error %>% map_lgl(is_null) # 1st two have errors 
+is_ok
+x
+x[!is_ok] # 3rd does not have error 
+y$result[is_ok] %>% flatten_dbl()
+
+x <- list(1, 10, "a")
+x %>% map_dbl(possibly(log, NA_real_)) # Like safely(), possibly() always succeeds. It’s simpler than safely(), because you give it a default value to return when there is an error.  
+#> [1] 0.0 2.3  NA
+
+x <- list(1, -1)
+x %>% map(quietly(log)) %>% str()
+# quietly() performs a similar role to safely(), but instead of capturing errors, it captures printed output, messages, and warnings: 
+
+# Mapping over multiple arguments 
+mu <- list(5, 10, -3)
+mu %>% 
+  map(rnorm, n = 5) %>% 
+  str()
+
+sigma <- list(1, 5, 10)
+seq_along(mu) %>% 
+  map(~rnorm(5, mu[[.]], sigma[[.]])) %>% 
+  str()
+
+seq_along(mu)
+
+# But that obfuscates the intent of the code. Instead we could use map2() which iterates over two vectors in parallel: 
+map2(mu, sigma, rnorm, n = 5) %>% str()
+
+# the arguments that vary for each call come before the function; arguments that are the same for every call come after. 
+
+# You could also imagine map3(), map4(), map5(), map6() etc, but that would get tedious quickly. Instead, purrr provides pmap() which takes a list of arguments. You might use that if you wanted to vary the mean, standard deviation, and number of samples: 
+
+n <- list(1, 3, 5)
+list(n, mu, sigma)
+args1 <- list(n, mu, sigma)
+args1 %>%
+  pmap(rnorm) %>% 
+  str()
+
+args2 <- list(mean = mu, sd = sigma, n = n)
+args2 %>% 
+  pmap(rnorm) %>% 
+  str()
+
+args2 <- list(mean = mu, sd = sigma, n = n)
+args2 %>% 
+  pmap(rnorm) %>% 
+  str()
+
+args2 %>% 
+  pmap(rnorm) 
+
+params <- tribble(
+  ~mean, ~sd, ~n,
+    5,     1,  1,
+   10,     5,  3,
+   -3,    10,  5
+)
+
+params %>% 
+  pmap(rnorm)
+
+# Invoking different functions 
+f <- c("runif", "rnorm", "rpois")
+param <- list(
+  list(min = -1, max = 1), 
+  list(sd = 5), 
+  list(lambda = 10)
+)
+
+invoke_map(f, param, n = 5) %>% str()
+
+sim <- tribble(
+  ~f,      ~params,
+  "runif", list(min = -1, max = 1),
+  "rnorm", list(sd = 5),
+  "rpois", list(lambda = 10)
+)
+sim %>% 
+  mutate(sim = invoke_map(f, params, n = 10))
+
+# walk 
+x <- list(1, "a", 3)
+
+x %>% 
+  walk(print)
+
+library(ggplot2)
+plots <- mtcars %>% 
+  split(.$cyl) %>% 
+  map(~ggplot(., aes(mpg, wt)) + geom_point()) # make a plot for each df 
+paths <- stringr::str_c(names(plots), ".pdf")
+paths
+pwalk(list(paths, plots), ggsave, path = tempdir())
+pwalk(list(paths, plots), ggsave, path = "~/Desktop/2017_summer/Rclub-r4ds_Ruijuan.Li/")
+
+list(paths, plots) 
+plots # plots is the actural plots 
+tempdir()
+?tempdir # 
+
+# Other patterns of for loops 
+# 21.9.1 Predicate functions 
+
+iris %>% 
+  keep(is.factor) %>% 
+  str()
+
+iris %>% 
+  keep(is.factor) 
+
+iris %>% 
+  discard(is.factor) %>% 
+  str()
+
+# some() and every() determine if the predicate is true for any or for all of the elements. 
+x <- list(1:5, letters, list(10))
+x
+x %>% 
+  some(is_character)
+
+x %>% 
+  every(is_vector)
+
+x %>% 
+  every(is_character)
+
+set.seed(2)
+x <- sample(10) # sample 100 numbers from 1-100 with no replacement 
+x
+
+x %>% 
+  detect(~ . > 5)
+
+x %>% 
+  detect_index(~ . > 5) 
+
+# head_while() and tail_while() take elements from the start or end of a vector while a predicate is true: 
+x %>% 
+  head_while(~ . > 1)
+
+x %>% 
+  tail_while(~ . > 5)
+x
+
+# Reduce and accumulate 
+dfs <- list(
+  age = tibble(name = "John", age = 30),
+  sex = tibble(name = c("John", "Mary"), sex = c("M", "F")),
+  trt = tibble(name = "Mary", treatment = "A")
+)
+
+dfs
+
+dfs %>% reduce(full_join)
+
+vs <- list(
+  c(1, 3, 5, 6, 10),
+  c(1, 2, 3, 7, 8, 10),
+  c(1, 2, 3, 4, 8, 9, 10)
+)
+
+vs %>% reduce(intersect) # this is very important 
+
+x <- sample(10)
+x
+x %>% accumulate(`+`)
+```
 
 
 
