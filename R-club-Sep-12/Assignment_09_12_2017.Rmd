@@ -123,7 +123,7 @@ col_sum3(df[1:2], mean)
 col_sum3(df[1], mean) 
 col_sum3(df[0], mean) 
 
-col_sum4(df, mean) %>% typeof()
+col_sum4(df, mean) %>% typeof() 
 col_sum4(df[1:2], mean)
 col_sum4(df[1], mean)
 col_sum4(df[0], mean)  
