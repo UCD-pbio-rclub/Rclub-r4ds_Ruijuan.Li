@@ -2106,7 +2106,8 @@ df <- tribble(
   "female", 2,
   "male", 1
 )
-model_matrix(df, response ~ sex)
+df
+model_matrix(df, response ~ sex) # model automatically convert categorical value factor into values... 
 
 ggplot(sim2) + 
   geom_point(aes(x, y))
@@ -2131,6 +2132,75 @@ ggplot(sim3, aes(x1, y)) +
 
 mod1 <- lm(y ~ x1 + x2, data = sim3)
 mod2 <- lm(y ~ x1 * x2, data = sim3)
+class(sim3$x1) # integer 
+class(sim3$x2) # factor 
+
+grid <- sim3 %>% 
+  data_grid(x1, x2) %>% 
+  gather_predictions(mod1, mod2)
+
+grid
+
+ggplot(sim3, aes(x1, y, colour = x2)) + 
+  geom_point() + 
+  geom_line(data = grid, aes(y = pred)) + 
+  facet_wrap(~ model)
+
+sim3 <- sim3 %>% 
+  gather_residuals(mod1, mod2)
+sim3
+
+
+ggplot(sim3, aes(x1, resid, colour = x2)) + 
+  geom_point() + 
+  facet_grid(model ~ x2)
+
+?gather_residuals # add residual to data frame 
+
+# 23.4.3 Interactions (two continuous)
+mod1 <- lm(y ~ x1 + x2, data = sim4)
+mod2 <- lm(y ~ x1 * x2, data = sim4)
+
+grid <- sim4 %>% 
+  data_grid(
+    x1 = seq_range(x1, 5), # regularly spaced grid of five values between the minimum and maximum numbers 
+    x2 = seq_range(x2, 5) 
+  ) %>% 
+  gather_predictions(mod1, mod2)
+grid
+
+seq_range(c(0.0123, 0.923423), n = 5)
+seq_range(c(0.0123, 0.923423), n = 5, pretty = TRUE)
+
+x1 <- rcauchy(100)
+seq_range(x1, n = 5)
+seq_range(x1, n = 5, trim = 0.10)
+seq_range(x1, n = 5, trim = 0.25)
+seq_range(x1, n = 5, trim = 0.50)
+
+x2 <- c(0, 1)
+seq_range(x2, n = 5)
+seq_range(x2, n = 5, expand = 0.10)
+seq_range(x2, n = 5, expand = 0.25)
+seq_range(x2, n = 5, expand = 0.50)
+
+ggplot(grid, aes(x1, x2)) + 
+  geom_tile(aes(fill = pred)) + 
+  facet_wrap(~ model)
+
+grid$pred
+
+ggplot(grid, aes(x1, pred, colour = x2, group = x2)) + 
+  geom_line() +
+  facet_wrap(~ model)
+ggplot(grid, aes(x2, pred, colour = x1, group = x1)) + 
+  geom_line() +
+  facet_wrap(~ model)
+
+grid
+
+# 23.4.4 Transformations 
+
 
 
 ```
