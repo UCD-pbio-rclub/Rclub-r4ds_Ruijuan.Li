@@ -11,7 +11,7 @@ output:
 library(tidyverse)
 
 library(modelr)
-options(na.action = na.warn)
+options(na.action = na.warn) 
 ```
 
 ### 23.2.1 Exercises
@@ -87,6 +87,8 @@ model2 <- function(a, data) {
   a[1] + data$x * a[2] + a[3]
 }
 
-# a1 + a3 will be the intercept 
+# a1 + a3 will be the intercept  
 ```
 
+# MCMC VS optimization ... 
+# grid search in bayes ... 

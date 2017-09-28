@@ -1,0 +1,83 @@
+---
+title: "Assignment_09_27_2017"
+author: "Ruijuan Li"
+date: "9/27/2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r}
+library(tidyverse)
+library(modelr)
+```
+
+23.3.3 Exercises
+
+1. Instead of using lm() to fit a straight line, you can use loess() to fit a smooth curve. Repeat the process of model fitting, grid generation, predictions, and visualisation on sim1 using loess() instead of lm(). How does the result compare to geom_smooth()?
+```{r}
+sim1_mod <- lm(y ~ x, data = sim1)
+sim2_mod <- loess(y ~ x, data = sim1)
+
+grid1 <- sim1 %>% 
+  data_grid(x)
+
+grid1 <- grid1 %>% 
+  add_predictions(sim1_mod) 
+
+ggplot(sim1, aes(x)) +
+  geom_point(aes(y = y)) +
+  geom_line(aes(y = pred), data = grid1, colour = "red", size = 1) 
+
+grid2 <- sim1 %>% 
+  data_grid(x)
+
+grid2 <- grid1 %>% 
+  add_predictions(sim2_mod) 
+
+ggplot(sim1, aes(x)) +
+  geom_point(aes(y = y)) +
+  geom_line(aes(y = pred), data = grid2, colour = "red", size = 1) 
+
+ggplot(sim1) + 
+  geom_point(aes(x = x, y=y)) + 
+  geom_smooth(mapping = aes(x = x, y = y))
+
+# loess is more similar to geom_smooth 
+?loess # Local Polynomial Regression Fitting: Fit a polynomial surface determined by one or more numerical predictors, using local fitting. 
+```
+
+2. add_predictions() is paired with gather_predictions() and spread_predictions(). How do these three functions differ?
+```{r}
+# Add predictions to a data frame
+
+df <- tibble::data_frame(
+  x = sort(runif(100)),
+  y = 5 * x + 0.5 * x ^ 2 + 3 + rnorm(length(x))
+)
+plot(df)
+
+m1 <- lm(y ~ x, data = df)
+grid <- data.frame(x = seq(0, 1, length = 10))
+grid %>% add_predictions(m1)
+
+m2 <- lm(y ~ poly(x, 2), data = df)
+grid %>% spread_predictions(m1, m2) # add one column for each model
+grid %>% gather_predictions(m1, m2) # add prediction but in long format 
+```
+
+3. What does geom_ref_line() do? What package does it come from? Why is displaying a reference line in plots showing residuals useful and important?
+```{r}
+?geom_ref_line # add a reference line, came with package modelr. 
+# the importance is to see residuals are evenly spread across the reference line. 
+```
+
+4. Why might you want to look at a frequency polygon of absolute residuals? What are the pros and cons compared to looking at the raw residuals?
+```{r}
+# we are expecting a normal distribution of residual. mostly 0 and less and less when they are deviated from 0. 
+```
+
+
+
+
+

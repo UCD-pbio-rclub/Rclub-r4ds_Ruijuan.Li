@@ -2050,10 +2050,90 @@ ggplot(sim1, aes(x, y)) +
   geom_point(size = 2, colour = "grey30") + 
   geom_abline(intercept = best$par[1], slope = best$par[2])
 
+sim1_mod <- lm(y ~ x, data = sim1)
+coef(sim1_mod)
+```
+
+### 09-27-2017 
+```{r}
+# visualizing models 
+## predictions 
+grid <- sim1 %>% 
+  data_grid(x)
+
+class(grid)
+grid 
+sim1 %>% dim() 
+?data_grid 
+
+grid <- grid %>% 
+  add_predictions(sim1_mod) 
+grid
+sim1_mod
+?add_predictions # add predictions to a data frame 
+
+ggplot(sim1, aes(x)) +
+  geom_point(aes(y = y)) +
+  geom_line(aes(y = pred), data = grid, colour = "red", size = 1)
+
+# 23.3.2 Residuals 
+sim1 <- sim1 %>% 
+  add_residuals(sim1_mod)
+sim1
+
+ggplot(sim1, aes(resid)) + 
+  geom_freqpoly(binwidth = 0.5)
+# Note that the average of the residual will always be 0. 
+
+ggplot(sim1, aes(x, resid)) + 
+  geom_ref_line(h = 0) + # adding a reference line 
+  geom_point()
+
+# Formulas and model families
+df <- tribble(
+  ~y, ~x1, ~x2,
+  4, 2, 5,
+  5, 1, 6
+)
+df
+
+model_matrix(df, y ~ x1) # do not understand 
+
+# 23.4.1 Categorical variables
+df <- tribble(
+  ~ sex, ~ response,
+  "male", 1,
+  "female", 2,
+  "male", 1
+)
+model_matrix(df, response ~ sex)
+
+ggplot(sim2) + 
+  geom_point(aes(x, y))
+
+mod2 <- lm(y ~ x, data = sim2)
+
+grid <- sim2 %>% 
+  data_grid(x) %>% 
+  add_predictions(mod2)
+grid 
+
+ggplot(sim2, aes(x)) + 
+  geom_point(aes(y = y)) +
+  geom_point(data = grid, aes(y = pred), colour = "red", size = 4)
+
+tibble(x = "e") %>% 
+  add_predictions(mod2)
+
+# 23.4.2 Interactions (continuous and categorical)
+ggplot(sim3, aes(x1, y)) + 
+  geom_point(aes(colour = x2))
+
+mod1 <- lm(y ~ x1 + x2, data = sim3)
+mod2 <- lm(y ~ x1 * x2, data = sim3)
 
 
 ```
-
 
 
 
