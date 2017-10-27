@@ -1,0 +1,58 @@
+---
+title: "model_building"
+author: "Ruijuan Li"
+date: "10/27/2017"
+output: html_document
+---
+
+### 24.2.3 Exercises
+
+1. In the plot of lcarat vs. lprice, there are some bright vertical strips. What do they represent?
+```{r}
+library(tidyverse)
+library(modelr)
+options(na.action=na.warn)
+
+library(nycflights13)
+library(lubridate)
+
+diamonds2 <- diamonds %>% 
+  filter(carat <= 2.5) %>% 
+  mutate(lprice = log2(price), lcarat = log2(carat))
+
+ggplot(diamonds2, aes(lcarat, lprice)) + 
+  geom_hex(bins = 50)
+```
+
+it means just few diamond fall into those ranges 
+
+2. If log(price) = a_0 + a_1 * log(carat), what does that say about the relationship between price and carat?
+
+it says the log of price and log of carat has a linear relationship with a_o as the intercept and a_1 as the slope. 
+
+3. Extract the diamonds that have very high and very low residuals. Is there anything unusual about these diamonds? Are the particularly bad or good, or do you think these are pricing errors?
+```{r}
+# high residual 
+diamonds2 %>% 
+  filter(abs(lresid) > 1) %>% 
+  add_predictions(mod_diamond) %>% 
+  mutate(pred = round(2 ^ pred)) %>% 
+  select(price, pred, carat:table, x:z) %>% 
+  #colnames()
+  arrange(price)
+```
+
+nothing wrong really, as stated in the text. 
+
+4. Does the final model, mod_diamonds2, do a good job of predicting diamond prices? Would you trust it to tell you how much to spend if you were buying a diamond?
+```{r}
+diamonds2 %>% 
+  add_predictions(mod_diamond2) %>%
+  add_residuals(mod_diamond2) %>%
+  summarise(sq_err = sqrt(mean(resid^2)),
+            abs_err = mean(abs(resid)),
+            p975_err = quantile(resid, 0.975),
+            p025_err = quantile(resid, 0.025))
+```
+
+To answer this quesiton, need to check residual. 
