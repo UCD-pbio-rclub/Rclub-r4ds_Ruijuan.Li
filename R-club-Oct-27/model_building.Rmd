@@ -15,6 +15,7 @@ options(na.action=na.warn)
 
 library(nycflights13)
 library(lubridate)
+library("broom") 
 
 diamonds2 <- diamonds %>% 
   filter(carat <= 2.5) %>% 
@@ -33,6 +34,11 @@ it says the log of price and log of carat has a linear relationship with a_o as 
 3. Extract the diamonds that have very high and very low residuals. Is there anything unusual about these diamonds? Are the particularly bad or good, or do you think these are pricing errors?
 ```{r}
 # high residual 
+mod_diamond <- lm(lprice ~ lcarat, data = diamonds2)
+
+diamonds2 <- diamonds2 %>% 
+  add_residuals(mod_diamond, "lresid")
+
 diamonds2 %>% 
   filter(abs(lresid) > 1) %>% 
   add_predictions(mod_diamond) %>% 
@@ -46,6 +52,8 @@ nothing wrong really, as stated in the text.
 
 4. Does the final model, mod_diamonds2, do a good job of predicting diamond prices? Would you trust it to tell you how much to spend if you were buying a diamond?
 ```{r}
+mod_diamond2 <- lm(lprice ~ lcarat + color + cut + clarity, data = diamonds2)
+
 diamonds2 %>% 
   add_predictions(mod_diamond2) %>%
   add_residuals(mod_diamond2) %>%
@@ -56,3 +64,115 @@ diamonds2 %>%
 ```
 
 To answer this quesiton, need to check residual. 
+
+### 24.3.5 Exercises
+
+1. Use your Google sleuthing skills to brainstorm why there were fewer than expected flights on Jan 20, May 26, and Sep 1. (Hint: they all have the same explanation.) How would these days generalise to another year?
+
+those are federal holidays. 
+
+2. What do the three days with high positive residuals represent? How would these days generalise to another year?
+
+```{r}
+# daily %>% 
+#   top_n(3, resid)
+#> # A tibble: 3 × 5
+#>         date     n  wday resid   term
+#>       <date> <int> <ord> <dbl> <fctr>
+#> 1 2013-11-30   857   Sat 112.4   fall
+#> 2 2013-12-01   987   Sun  95.5   fall
+#> 3 2013-12-28   814   Sat  69.4   fall
+```
+
+They are the days after thanksgiving and Christmas. 
+
+3. Create a new variable that splits the wday variable into terms, but only for Saturdays, i.e. it should have Thurs, Fri, but Sat-summer, Sat-spring, Sat-fall. How does this model compare with the model with every combination of wday and term?
+
+```{r}
+daily <- flights %>% 
+  mutate(date = make_date(year, month, day)) %>% # way of making date column 
+  group_by(date) %>% 
+  summarise(n = n())
+
+daily <- daily %>% 
+  mutate(wday = wday(date, label = TRUE)) 
+
+term <- function(date) {
+  cut(date, 
+    breaks = ymd(20130101, 20130605, 20130825, 20140101),
+    labels = c("spring", "summer", "fall") 
+  )
+}
+
+daily <- daily %>% 
+  mutate(term = term(date)) 
+
+daily$term_2 <- ifelse(daily$wday=="Sat", paste(daily$wday, daily$term, sep = "-"), daily$wday)
+
+mod2 <- lm(n ~ wday * term, data = daily)
+mod4 <- lm(n ~ term_2, data = daily)
+
+daily %>% 
+  gather_residuals(with_term_Sat = mod4, with_term_all = mod2) %>% 
+  ggplot(aes(date, resid, colour = model)) +
+    geom_line(alpha = 0.75)
+
+glance(mod4) %>% select(r.squared, sigma, AIC, df)
+glance(mod2) %>% select(r.squared, sigma, AIC, df)
+```
+
+The model with terms x Saturday has higher residuals in the fall, and lower residuals in the spring than the model with all interactions.
+
+Using overall model comparison terms, mod4 has a lower  R2R2  and regression standard error,  σ̂ σ^ , despite using fewer variables. More importantly for prediction purposes, it has a higher AIC - which is an estimate of the out of sample error.
+
+4. Create a new wday variable that combines the day of week, term (for Saturdays), and public holidays. What do the residuals of that model look like?
+
+```{r}
+holidays = c(20130101, # new years
+             20130121, # mlk
+             20130218, # presidents
+             20130527, # memorial
+             20130704, # independence
+             20130902, # labor
+             20131028, # columbus
+             20131111, # veterans
+             20131128, # thanksgiving
+             20131225)
+
+daily$term_3 <- ifelse(daily$date %in% holidays, "holiday", daily$term_2) 
+mod5 <- lm(n ~ term_3, data = daily)
+
+daily %>% 
+  gather_residuals(with_term_Sat_holiday = mod5, with_term_all = mod2) %>% 
+  ggplot(aes(date, resid, colour = model)) +
+    geom_line(alpha = 0.75)
+
+glance(mod5) %>% select(r.squared, sigma, AIC, df)
+glance(mod2) %>% select(r.squared, sigma, AIC, df) 
+```
+
+5. What happens if you fit a day of week effect that varies by month (i.e. n ~ wday * month)? Why is this not very helpful?
+```{r}
+daily$month <- month(as.POSIXlt(daily$date, format="%d-%m-%Y"))
+mod6 <- lm(n ~ wday * month, data = daily)
+
+daily %>% 
+  gather_residuals(wday_month = mod6, with_term_all = mod2) %>% 
+  ggplot(aes(date, resid, colour = model)) +
+    geom_line(alpha = 0.75)
+
+glance(mod6) %>% select(r.squared, sigma, AIC, df)
+glance(mod2) %>% select(r.squared, sigma, AIC, df) 
+```
+
+6. What would you expect the model n ~ wday + ns(date, 5) to look like? Knowing what you know about the data, why would you expect it to be not particularly effective?
+```{r}
+
+```
+
+7. We hypothesised that people leaving on Sundays are more likely to be business travellers who need to be somewhere on Monday. Explore that hypothesis by seeing how it breaks down based on distance and time: if it’s true, you’d expect to see more Sunday evening flights to places that are far away. 
+```{r}
+
+```
+
+8. It’s a little frustrating that Sunday and Saturday are on separate ends of the plot. Write a small function to set the levels of the factor so that the week starts on Monday. 
