@@ -2507,7 +2507,60 @@ gapminder %>%
   ggplot(aes(year, lifeExp, colour = country)) +
     geom_line()
 
+bad_fit
 
+# list columns 
+data.frame(x = list(1:3, 3:5))
+data.frame(
+  x = I(list(1:3, 3:5)), 
+  y = c("1, 2", "3, 4, 5")
+)
+
+tibble(
+  x = list(1:3, 3:5), 
+  y = c("1, 2", "3, 4, 5")
+)
+
+tribble(
+   ~x, ~y,
+  1:3, "1, 2",
+  3:5, "3, 4, 5"
+)
+
+# 25.4.1 With nesting
+test <-
+gapminder %>% 
+  nest(year:gdpPercap) # nesting on ungruped data 
+
+# 25.4.3 From multivalued summaries 
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(q = quantile(mpg))
+
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(q = list(quantile(mpg)))
+
+probs <- c(0.01, 0.25, 0.5, 0.75, 0.99)
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(p = list(probs), q = list(quantile(mpg, probs))) %>% 
+  unnest() 
+
+# 25.4.4 From a named list 
+x <- list(
+  a = 1:5,
+  b = 3:4, 
+  c = 5:6
+) 
+x
+df <- enframe(x)
+df
+
+df %>% 
+  mutate(
+    smry = map2_chr(name, value, ~ stringr::str_c(.x, ": ", .y[1]))
+  )  
 ```
 
 
