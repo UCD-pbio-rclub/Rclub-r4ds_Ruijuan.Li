@@ -96,8 +96,10 @@ bad_fit %>%
 ### 25.4.5 Exercises
 
 1. List all the functions that you can think of that take a atomic vector and return a list.
+skip
 
 2. Brainstorm useful summary functions that, like quantile(), return multiple values.
+skip
 
 3. What’s missing in the following data frame? How does quantile() return that missing piece? Why isn’t that helpful here?
 
@@ -116,12 +118,24 @@ mtcars %>%
 #> 5     4  33.9
 #> 6     6  17.8
 #> # ... with 9 more rows
+
+# miss which quantile info 
+probs <- c(0.01, 0.25, 0.5, 0.75, 0.99)
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(p = list(probs), q = list(quantile(mpg, probs))) %>% 
+  unnest()  
 ```
 
-4. What does this code do? Why might might it be useful?
+
+4. What does this code do? Why might it be useful?
 
 ```{r}
 mtcars %>% 
   group_by(cyl) %>% 
   summarise_each(funs(list)) 
 ```
+
+create a list of three items for each column corresponding to cyl of 4, 6, and 8. 
+
+
