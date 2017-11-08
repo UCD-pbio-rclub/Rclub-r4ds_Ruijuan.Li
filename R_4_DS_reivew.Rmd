@@ -26,4 +26,13 @@ my understanding is that adding term improved the model fit (reduced residual), 
 3. the model with just Saturday term performes worse than the model with all term. 
 lower R squred, higher AIC 
 
+4. model with all term is still performing better, but this model is better than the model in 3. 
+
+https://www.youtube.com/watch?v=jbkSRLYSojo cool video
+
+list column: can be useful when saving complex data 
+
+nest()
+unnest() 
+
 
