@@ -278,7 +278,7 @@ Using overall model comparison terms, mod4 has a lower  R2R2  and regression sta
 
 
 ```r
-holidays = c(20130101, # new years
+holidays = lubridate::ymd(c(20130101, # new years
              20130121, # mlk
              20130218, # presidents
              20130527, # memorial
@@ -287,7 +287,7 @@ holidays = c(20130101, # new years
              20131028, # columbus
              20131111, # veterans
              20131128, # thanksgiving
-             20131225)
+             20131225))
 
 daily$term_3 <- ifelse(daily$date %in% holidays, "holiday", daily$term_2) 
 mod5 <- lm(n ~ term_3, data = daily)
@@ -305,8 +305,8 @@ glance(mod5) %>% select(r.squared, sigma, AIC, df)
 ```
 
 ```
-##   r.squared    sigma      AIC df
-## 1 0.7356615 47.35969 3862.885  9
+##   r.squared   sigma     AIC df
+## 1 0.7736044 43.8908 3808.33 10
 ```
 
 ```r

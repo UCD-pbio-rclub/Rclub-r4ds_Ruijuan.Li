@@ -130,7 +130,7 @@ Using overall model comparison terms, mod4 has a lower  R2R2  and regression sta
 4. Create a new wday variable that combines the day of week, term (for Saturdays), and public holidays. What do the residuals of that model look like?
 
 ```{r}
-holidays = c(20130101, # new years
+holidays = lubridate::ymd(c(20130101, # new years
              20130121, # mlk
              20130218, # presidents
              20130527, # memorial
@@ -139,7 +139,7 @@ holidays = c(20130101, # new years
              20131028, # columbus
              20131111, # veterans
              20131128, # thanksgiving
-             20131225)
+             20131225))
 
 daily$term_3 <- ifelse(daily$date %in% holidays, "holiday", daily$term_2) 
 mod5 <- lm(n ~ term_3, data = daily)

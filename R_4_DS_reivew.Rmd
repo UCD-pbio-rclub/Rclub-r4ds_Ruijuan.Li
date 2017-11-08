@@ -1,0 +1,29 @@
+---
+title: "R_4_DS_review_model"
+author: "Ruijuan Li"
+date: "11/8/2017"
+output: html_document
+---
+
+24.2.2 
+how he found there is nothing wrong in the price list? 
+
+24.2.3 exercise 4
+does the final model mod_diamonds2, do a good job of predicting diamond prices? Would you trust it to tell you how much to spend if you were buying a diamond? 
+
+overall, it is better, based on the residual, but there are some diamonds with quite large residuals at the lower lcarat end where the model doesn't work well enough. 
+
+make_date() 
+
+wday()
+
+24.3 "Our model fails to accurately predict the number of flights on Saturday: during summer there are more flights than we expect, and during Fall there are fewer. We’ll see how we can do better to capture this pattern in the next section." I actually see the model doesn't work well on several wdays (Fri, Wed...) 
+
+24.3.2 seasonal Saturday effect 
+my understanding is that adding term improved the model fit (reduced residual), but I don't see using rlm() function improved model fit. 
+
+24.3.5
+3. the model with just Saturday term performes worse than the model with all term. 
+lower R squred, higher AIC 
+
+
